@@ -1,6 +1,7 @@
 const Contact = require('../models/Contact');
 const sharp = require('sharp');
 const path = require('path');
+const { cloudinary } = require('../middlewares/cloudinary');
 
 
 // Obtener todos los servicios
@@ -18,24 +19,9 @@ exports.getContact = async (req, res) => {
 exports.addContact = async (req, res) => {
   try {
     let { name, email, telefono, facebookUrl, extraUrl, footer, iconColor, iconUrl } = req.body;
-    let iconFile = req.file ? req.file.filename : undefined;
-    // Procesar imagen a circular si se subió
-    if (iconFile) {
-      const inputPath = path.join(__dirname, '../public/uploads', iconFile);
-      const outputPath = path.join(__dirname, '../public/uploads', 'circle-' + iconFile);
-      await sharp(inputPath)
-        .resize(160, 160)
-        .composite([
-          {
-            input: Buffer.from(
-              `<svg><circle cx="80" cy="80" r="80"/></svg>`
-            ),
-            blend: 'dest-in'
-          }
-        ])
-        .png()
-        .toFile(outputPath);
-      iconFile = 'circle-' + iconFile;
+    // Si se subió archivo, usar la URL de Cloudinary
+    if (req.file && req.file.path) {
+      iconUrl = req.file.path;
     }
     // Generar emailUrl y whatsappUrl automáticamente
     const emailUrl = email ? `mailto:${email}` : '';
@@ -51,8 +37,7 @@ exports.addContact = async (req, res) => {
       extraUrl,
       footer,
       iconColor,
-      iconUrl,
-      iconFile
+      iconUrl
     });
     await newContact.save();
     res.redirect('/admin/contact');
@@ -67,24 +52,13 @@ exports.updateContact = async (req, res) => {
   try {
     const { id } = req.params;
     let { name, email, telefono, facebookUrl, extraUrl, footer, iconColor, iconUrl } = req.body;
-    let iconFile = req.file ? req.file.filename : undefined;
-    // Procesar imagen a circular si se subió
-    if (iconFile) {
-      const inputPath = path.join(__dirname, '../public/uploads', iconFile);
-      const outputPath = path.join(__dirname, '../public/uploads', 'circle-' + iconFile);
-      await sharp(inputPath)
-        .resize(160, 160)
-        .composite([
-          {
-            input: Buffer.from(
-              `<svg><circle cx="80" cy="80" r="80"/></svg>`
-            ),
-            blend: 'dest-in'
-          }
-        ])
-        .png()
-        .toFile(outputPath);
-      iconFile = 'circle-' + iconFile;
+    const contacto = await Contact.findById(id);
+    if (req.file && req.file.path) {
+      if (contacto && contacto.iconUrl && contacto.iconUrl.includes('cloudinary.com')) {
+        const publicId = contacto.iconUrl.split('/').slice(-1)[0].split('.')[0];
+        await cloudinary.uploader.destroy('webservitec/' + publicId);
+      }
+      iconUrl = req.file.path;
     }
     // Generar emailUrl y whatsappUrl automáticamente
     const emailUrl = email ? `mailto:${email}` : '';
@@ -102,7 +76,6 @@ exports.updateContact = async (req, res) => {
       iconColor,
       iconUrl
     };
-    if (iconFile) updateData.iconFile = iconFile;
     await Contact.findByIdAndUpdate(id, updateData);
     res.redirect('/admin/contact');
   } catch (error) {
@@ -111,14 +84,19 @@ exports.updateContact = async (req, res) => {
   }
 };
 
-// Eliminar un servicio
+// Eliminar un contacto
 exports.deleteContact = async (req, res) => {
   try {
     const { id } = req.params;
+    const contacto = await Contact.findById(id);
+    if (contacto && contacto.iconUrl && contacto.iconUrl.includes('cloudinary.com')) {
+      const publicId = contacto.iconUrl.split('/').slice(-1)[0].split('.')[0];
+      await cloudinary.uploader.destroy('webservitec/' + publicId);
+    }
     await Contact.findByIdAndDelete(id);
     res.redirect('/admin/contact');
   } catch (error) {
     console.error(error);
-    res.status(500).send('Error al eliminar el servicio');
+    res.status(500).send('Error al eliminar el contacto');
   }
 };

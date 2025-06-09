@@ -876,6 +876,36 @@ textarea {
 .delete-btn:hover {
   background-color: #c0392b;
 }
+.delete-icon-btn {
+  background: #e74c3c;
+  color: #fff;
+  border: none;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+  padding: 0;
+  transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+  box-shadow: 0 2px 6px rgba(231,76,60,0.08);
+}
+.delete-icon-btn i {
+  pointer-events: none;
+}
+.delete-icon-btn:hover {
+  background: #c0392b;
+  color: #fff;
+  box-shadow: 0 4px 12px rgba(231,76,60,0.18);
+}
+@media (max-width: 600px) {
+  .delete-icon-btn {
+    width: 28px;
+    height: 28px;
+    font-size: 1rem;
+  }
+}
 
 /* Admin Container */
 .admin-container-galeris {

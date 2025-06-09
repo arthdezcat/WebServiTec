@@ -1,5 +1,6 @@
 const Celular = require('../models/Service');
 const path = require('path');
+const { cloudinary } = require('../middlewares/cloudinary');
 
 // Obtener todos los servicios
 exports.getServices = async (req, res) => {
@@ -16,8 +17,8 @@ exports.getServices = async (req, res) => {
 exports.addService = async (req, res) => {
   try {
     let image = req.body.image;
-    if (req.file) {
-      image = '/uploads/' + req.file.filename;
+    if (req.file && req.file.path) {
+      image = req.file.path; // URL de Cloudinary
     }
     const { title, description, price, cantidad, colores, tallas } = req.body;
     const coloresArray = colores ? colores.split(',').map(c => c.trim()) : [];
@@ -44,8 +45,13 @@ exports.updateService = async (req, res) => {
   try {
     const { id } = req.params;
     let image = req.body.image;
-    if (req.file) {
-      image = '/uploads/' + req.file.filename;
+    const servicio = await Celular.findById(id);
+    if (req.file && req.file.path) {
+      image = req.file.path;
+      if (servicio && servicio.image && servicio.image.includes('cloudinary.com')) {
+        const publicId = servicio.image.split('/').slice(-1)[0].split('.')[0];
+        await cloudinary.uploader.destroy('webservitec/' + publicId);
+      }
     }
     const { title, description, price, cantidad, colores, tallas } = req.body;
     const coloresArray = colores ? colores.split(',').map(c => c.trim()) : [];
@@ -70,6 +76,11 @@ exports.updateService = async (req, res) => {
 exports.deleteService = async (req, res) => {
   try {
     const { id } = req.params;
+    const servicio = await Celular.findById(id);
+    if (servicio && servicio.image && servicio.image.includes('cloudinary.com')) {
+      const publicId = servicio.image.split('/').slice(-1)[0].split('.')[0];
+      await cloudinary.uploader.destroy('webservitec/' + publicId);
+    }
     await Celular.findByIdAndDelete(id);
     res.redirect('/admin/services');
   } catch (error) {

@@ -6,11 +6,13 @@
     "routes": [
       { "src": "/(.*)", "dest": "server.js" }
     ],
- "env": {
-"MONGO_URI":"mongodb+srv://midbpersonal:v6Z9tTDUwvuQWkl1@cluster0.erj4p.mongodb.net/ServiTec",
-"JWT_SECRET":"tu_secreto_para_mi",
-"KEY_SECRET":"mi_secreto_esta_con_tigo",
-"PORT":"3000"
+    "env": {
+      "MONGO_URI": "mongodb+srv://midbpersonal:v6Z9tTDUwvuQWkl1@cluster0.erj4p.mongodb.net/ServiTec",
+      "JWT_SECRET": "tu_secreto_para_mi",
+      "KEY_SECRET": "mi_secreto_esta_con_tigo",
+      "PORT": "3000",
+      "CLOUDINARY_CLOUD_NAME": "dacsquefq",
+      "CLOUDINARY_API_KEY": "419152252274757",
+      "CLOUDINARY_API_SECRET": "c5RsdGmQ25vw_kqseHpuW71-V1Y"
+    }
 }
-}
-  

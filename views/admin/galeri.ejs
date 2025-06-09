@@ -266,7 +266,7 @@
     <div class="admin-avatar">
       <img src="<%= homeInfo && homeInfo.logoUrl ? homeInfo.logoUrl : '' %>" alt="Admin Avatar">
     </div>
-    <div class="admin-name">Panel Admin <%= homeInfo && homeInfo.TituloServicio2 ? homeInfo.TituloServicio2  : 'TituloServicio2' %></div>
+    <div class="admin-name">Panel Admin</div>
     <ul id="sidebar-menu">
       <li><a href="/admin"><i class="fas fa-tachometer-alt"></i> Inicio</a></li>
       <li><a href="/admin/services"><i class="fas fa-tags"></i><%= homeInfo && homeInfo.TituloServicio1 ? homeInfo.TituloServicio1 : 'TituloServicio1' %></a></li>
@@ -407,10 +407,9 @@
                   <% } %>
                 </td>
                 <td>
-                  <a href="/admin/galeria/view/<%= oferta._id %>" class="btn btn-success btn-sm" style="margin-right:4px;">Ver</a>
                   <button class="btn btn-primary btn-sm btn-edit-offer" data-offer='<%= JSON.stringify(oferta) %>' style="margin-right:4px;">Editar</button>
                   <form action="/admin/galeria/delete/<%= oferta._id %>" method="post" style="display:inline;" onsubmit="return confirmDelete(event)">
-                    <button type="submit" class="btn btn-danger btn-sm">Eliminar</button>
+                    <button type="submit" class="btn btn-danger btn-sm delete-icon-btn" title="Eliminar"><i class="fas fa-trash-alt"></i></button>
                   </form>
                 </td>
               </tr>

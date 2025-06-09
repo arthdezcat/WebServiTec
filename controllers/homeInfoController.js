@@ -3,6 +3,7 @@ const sharp = require('sharp');
 const path = require('path');
 const fs = require('fs');
 const axios = require('axios');
+const { cloudinary } = require('../middlewares/cloudinary');
 
 // Mostrar formulario de edición de información de inicio
 exports.getHomeInfo = async (req, res) => {
@@ -45,45 +46,26 @@ exports.updateHomeInfo = async (req, res) => {
     }
 
     // Procesar logo subido
-    if (req.files && req.files['logoFile'] && req.files['logoFile'][0]) {
-      const file = req.files['logoFile'][0];
-      const inputPath = path.join(__dirname, '../public/uploads', file.filename);
-      const outputFile = 'circle-' + file.filename.replace(/\.[^.]+$/, '.png');
-      const outputPath = path.join(__dirname, '../public/uploads', outputFile);
-      await processCircularImage(inputPath, outputPath, 320); // Logo más grande
-      logoPath = '/uploads/' + outputFile;
+    if (req.files && req.files['logoFile'] && req.files['logoFile'][0] && req.files['logoFile'][0].path) {
+      // Eliminar logo anterior si se sube uno nuevo
+      if (homeInfo && homeInfo.logoUrl && homeInfo.logoUrl.includes('cloudinary.com')) {
+        const publicId = homeInfo.logoUrl.split('/').slice(-1)[0].split('.')[0];
+        await cloudinary.uploader.destroy('webservitec/' + publicId);
+      }
+      logoPath = req.files['logoFile'][0].path; // URL de Cloudinary
     } else if (logoUrl && logoUrl.startsWith('http')) {
-      // Descargar y procesar logo desde URL
-      const response = await axios.get(logoUrl, { responseType: 'arraybuffer' });
-      const ext = path.extname(logoUrl).split('?')[0] || '.png';
-      const fileName = 'logo-' + Date.now() + ext;
-      const inputPath = path.join(__dirname, '../public/uploads', fileName);
-      fs.writeFileSync(inputPath, response.data);
-      const outputFile = 'circle-' + fileName.replace(/\.[^.]+$/, '.png');
-      const outputPath = path.join(__dirname, '../public/uploads', outputFile);
-      await processCircularImage(inputPath, outputPath, 320);
-      logoPath = '/uploads/' + outputFile;
+      logoPath = logoUrl;
     }
-
     // Procesar icono subido
-    if (req.files && req.files['iconFile'] && req.files['iconFile'][0]) {
-      const file = req.files['iconFile'][0];
-      const inputPath = path.join(__dirname, '../public/uploads', file.filename);
-      const outputFile = 'circle-' + file.filename.replace(/\.[^.]+$/, '.png');
-      const outputPath = path.join(__dirname, '../public/uploads', outputFile);
-      await processCircularImage(inputPath, outputPath, 96); // Tamaño favicon
-      iconPath = '/uploads/' + outputFile;
+    if (req.files && req.files['iconFile'] && req.files['iconFile'][0] && req.files['iconFile'][0].path) {
+      // Eliminar icono anterior si se sube uno nuevo
+      if (homeInfo && homeInfo.iconUrl && homeInfo.iconUrl.includes('cloudinary.com')) {
+        const publicId = homeInfo.iconUrl.split('/').slice(-1)[0].split('.')[0];
+        await cloudinary.uploader.destroy('webservitec/' + publicId);
+      }
+      iconPath = req.files['iconFile'][0].path; // URL de Cloudinary
     } else if (iconUrl && iconUrl.startsWith('http')) {
-      // Descargar y procesar icono desde URL
-      const response = await axios.get(iconUrl, { responseType: 'arraybuffer' });
-      const ext = path.extname(iconUrl).split('?')[0] || '.png';
-      const fileName = 'icon-' + Date.now() + ext;
-      const inputPath = path.join(__dirname, '../public/uploads', fileName);
-      fs.writeFileSync(inputPath, response.data);
-      const outputFile = 'circle-' + fileName.replace(/\.[^.]+$/, '.png');
-      const outputPath = path.join(__dirname, '../public/uploads', outputFile);
-      await processCircularImage(inputPath, outputPath, 96);
-      iconPath = '/uploads/' + outputFile;
+      iconPath = iconUrl;
     } else if (logoPath && !iconUrl) {
       // Si no se subió icono, usar el logo procesado pero en tamaño favicon
       const logoInputPath = path.join(__dirname, '../public', logoPath);

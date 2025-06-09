@@ -1,26 +1,16 @@
 const multer = require('multer');
-const path = require('path');
+const { CloudinaryStorage } = require('multer-storage-cloudinary');
+const { cloudinary } = require('./cloudinary');
 
-// Configuración de almacenamiento para las imágenes de productos
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, path.join(__dirname, '../public/uploads'));
-  },
-  filename: function (req, file, cb) {
-    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-    cb(null, uniqueSuffix + path.extname(file.originalname));
+const storage = new CloudinaryStorage({
+  cloudinary: cloudinary,
+  params: {
+    folder: 'webservitec', // Puedes cambiar el nombre de la carpeta
+    allowed_formats: ['jpg', 'jpeg', 'png', 'gif'],
+    transformation: [{ width: 800, height: 800, crop: 'limit' }]
   }
 });
 
-const fileFilter = (req, file, cb) => {
-  // Aceptar solo imágenes
-  if (file.mimetype.startsWith('image/')) {
-    cb(null, true);
-  } else {
-    cb(new Error('Solo se permiten imágenes'), false);
-  }
-};
-
-const upload = multer({ storage, fileFilter });
+const upload = multer({ storage: storage });
 
 module.exports = upload;

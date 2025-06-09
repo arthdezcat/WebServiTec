@@ -1,5 +1,6 @@
 const ComputadoraLaptop = require('../models/Galeria'); // Ahora es ComputadoraLaptop
 const path = require('path');
+const { cloudinary } = require('../middlewares/cloudinary');
 
 // Obtener todas las ofertas
 exports.getGaleria = async (req, res) => {
@@ -29,8 +30,8 @@ exports.getGaleriaImages = async (req, res, next) => {
 exports.addGaleria = async (req, res) => {
   try {
     let image = req.body.image;
-    if (req.file) {
-      image = '/uploads/' + req.file.filename;
+    if (req.file && req.file.path) {
+      image = req.file.path; // URL de Cloudinary
     }
     const { title, description, tipo, fechaInicio, fechaFin, porcentaje, especial } = req.body;
     const newComputadora = new ComputadoraLaptop({ title, description, image, tipo, fechaInicio, fechaFin, porcentaje, especial });
@@ -47,8 +48,14 @@ exports.updateGaleria = async (req, res) => {
   try {
     const { id } = req.params;
     let image = req.body.image;
-    if (req.file) {
-      image = '/uploads/' + req.file.filename;
+    const galeria = await ComputadoraLaptop.findById(id);
+    // Si hay nueva imagen y la anterior era de Cloudinary, eliminar la anterior
+    if (req.file && req.file.path) {
+      image = req.file.path;
+      if (galeria && galeria.image && galeria.image.includes('cloudinary.com')) {
+        const publicId = galeria.image.split('/').slice(-1)[0].split('.')[0];
+        await cloudinary.uploader.destroy('webservitec/' + publicId);
+      }
     }
     const { title, description, tipo, fechaInicio, fechaFin, porcentaje, especial } = req.body;
     await ComputadoraLaptop.findByIdAndUpdate(id, { title, description, image, tipo, fechaInicio, fechaFin, porcentaje, especial });
@@ -63,6 +70,11 @@ exports.updateGaleria = async (req, res) => {
 exports.deleteGaleria = async (req, res) => {
   try {
     const { id } = req.params;
+    const galeria = await ComputadoraLaptop.findById(id);
+    if (galeria && galeria.image && galeria.image.includes('cloudinary.com')) {
+      const publicId = galeria.image.split('/').slice(-1)[0].split('.')[0];
+      await cloudinary.uploader.destroy('webservitec/' + publicId);
+    }
     await ComputadoraLaptop.findByIdAndDelete(id);
     res.redirect('/admin/galeria');
   } catch (error) {
