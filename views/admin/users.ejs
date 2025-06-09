@@ -290,7 +290,7 @@
               <th>Usuario</th>
               <th>Rol</th>
               <th>Permisos</th>
-              <th style="min-width:180px;">Acciones</th>
+              <th style="min-width:70px;width:1%;text-align:center;">Acciones</th>
             </tr>
           </thead>
           <tbody>
@@ -301,8 +301,8 @@
                 <td><%= user.permissions ? user.permissions.join(', ') : '' %></td>
                 <td>
                   <% if (user.role !== 'admin' && user.role !== 'superadmin') { %>
-                    <button class="btn btn-primary btn-sm btn-edit-user" data-user='<%= JSON.stringify(user) %>' style="margin-right:4px;">Editar</button>
-                    <form action="/admin/users/delete/<%= user._id %>" method="post" style="display:inline;" onsubmit="return confirmDeleteUser(event)">
+                    <button class="btn btn-primary btn-sm btn-edit-user" data-user='<%= JSON.stringify(user) %>' style="margin-right:4px;"><i class="fas fa-edit"></i></button>
+                    <form action="/admin/users/delete/<%= user._id %>" method="post" style="display:inline;" class="delete-form-inline" onsubmit="return confirmDeleteUser(event)">
                       <button type="submit" class="btn btn-danger btn-sm delete-icon-btn" title="Eliminar"><i class="fas fa-trash-alt"></i></button>
                     </form>
                   <% } else { %>

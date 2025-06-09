@@ -388,7 +388,7 @@
               <th>Desde</th>
               <th>Hasta</th>
               <th>Imagen</th>
-              <th style="min-width:180px;">Acciones</th>
+              <th style="min-width:70px;width:1%;text-align:center;">Acciones</th>
             </tr>
           </thead>
           <tbody>
@@ -407,8 +407,8 @@
                   <% } %>
                 </td>
                 <td>
-                  <button class="btn btn-primary btn-sm btn-edit-offer" data-offer='<%= JSON.stringify(oferta) %>' style="margin-right:4px;">Editar</button>
-                  <form action="/admin/galeria/delete/<%= oferta._id %>" method="post" style="display:inline;" onsubmit="return confirmDelete(event)">
+                  <button class="btn btn-primary btn-sm btn-edit-offer" data-offer='<%= JSON.stringify(oferta) %>' style="margin-right:4px;"><i class="fas fa-edit"></i></button>
+                  <form action="/admin/galeria/delete/<%= oferta._id %>" method="post" style="display:inline;" class="delete-form-inline" onsubmit="return confirmDelete(event)">
                     <button type="submit" class="btn btn-danger btn-sm delete-icon-btn" title="Eliminar"><i class="fas fa-trash-alt"></i></button>
                   </form>
                 </td>

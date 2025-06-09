@@ -1295,5 +1295,44 @@ footer p {
     margin: 2px 0;
   }
 }
+.delete-form-inline {
+  display: inline-block !important;
+  margin: 0;
+  padding: 0;
+  vertical-align: middle;
+  width: auto;
+  height: auto;
+}
+.btn-edit-product,
+.btn-edit-offer,
+.btn-edit-contact,
+.btn-edit-user {
+  min-width: 36px;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+.btn-edit-product i,
+.btn-edit-offer i,
+.btn-edit-contact i,
+.btn-edit-user i {
+  margin: 0;
+}
+.table th[style*="Acciones"],
+.table td:last-child {
+  padding-left: 4px !important;
+  padding-right: 4px !important;
+  text-align: center;
+  width: 1%;
+  min-width: 70px;
+  max-width: 90px;
+  white-space: nowrap;
+}
 
 
