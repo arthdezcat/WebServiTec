@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Administrar <%= homeInfo && homeInfo.TituloServicio1 ? homeInfo.TituloServicio1 : 'TituloServicio1' %></title>
+  <link rel="stylesheet" href="/css/styles.css">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+  <link rel="icon" href="/img/administracion.png" type="image/png">
+  <style>
+    body.admin-page {
+      display: flex;
+      min-height: 100vh;
+      margin: 0;
+      background: linear-gradient(120deg, #8ec5fc 0%, #e0c3fc 100%);
+    }
+    .sidebar-admin {
+      width: 250px;
+      background: #232946;
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 32px 0 0 0;
+      min-height: 100vh;
+      position: fixed;
+      left: 0;
+      top: 0;
+      z-index: 10;
+      box-shadow: 2px 0 12px rgba(0,0,0,0.08);
+    }
+    .sidebar-admin .admin-avatar {
+      width: 90px;
+      height: 90px;
+      border-radius: 50%;
+      background: #fff;
+      margin-bottom: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+    .sidebar-admin .admin-avatar img {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+    .sidebar-admin .admin-name {
+      font-size: 1.2rem;
+      font-weight: 700;
+      margin-bottom: 32px;
+      color: #eebf63;
+    }
+    .sidebar-admin ul {
+      list-style: none;
+      padding: 0;
+      width: 100%;
+    }
+    .sidebar-admin ul li {
+      width: 100%;
+    }
+    .sidebar-admin ul li a {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      color: #fff;
+      text-decoration: none;
+      padding: 16px 32px;
+      font-size: 1.1rem;
+      transition: background 0.2s, color 0.2s;
+      border-left: 4px solid transparent;
+    }
+    .sidebar-admin ul li a:hover, .sidebar-admin ul li a.active {
+      background: #eebf63;
+      color: #232946;
+      border-left: 4px solid #232946;
+    }
+    .main-admin-content {
+      margin-left: 250px;
+      width: calc(100% - 250px);
+      padding: 40px 32px 32px 32px;
+      min-height: 100vh;
+      background: transparent;
+    }
+    .dashboard-cards {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 32px;
+      justify-content: center;
+      margin-top: 32px;
+    }
+    .dashboard-card {
+      background: #fff;
+      border-radius: 18px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+      padding: 24px 18px;
+      min-width: 260px;
+      max-width: 320px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      transition: box-shadow 0.3s, transform 0.3s;
+    }
+    .dashboard-card img {
+      width: 80px;
+      height: 80px;
+      object-fit: contain;
+      border-radius: 12px;
+      margin-bottom: 16px;
+      background: #f3f3f3;
+    }
+    .dashboard-card .nombre {
+      font-size: 20px;
+      font-weight: 700;
+      margin-bottom: 8px;
+      color: #232946;
+    }
+    .dashboard-card .descripcion {
+      font-size: 15px;
+      color: #555;
+      margin-bottom: 12px;
+      text-align: center;
+    }
+    .dashboard-card .btn {
+      margin-top: 10px;
+      background: #eebf63;
+      color: #232946;
+      font-weight: 700;
+      border-radius: 22px;
+      padding: 8px 24px;
+      border: none;
+      transition: background 0.2s, color 0.2s;
+    }
+    .dashboard-card .btn:hover {
+      background: #232946;
+      color: #fff;
+    }
+    .table.product-table {
+      width: 100%;
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+      overflow: hidden;
+      margin-bottom: 40px;
+    }
+    .table.product-table th, .table.product-table td {
+      vertical-align: middle;
+      text-align: center;
+    }
+    .table.product-table th {
+      background: #f5f5f5;
+      font-weight: 700;
+      color: #232946;
+    }
+    .btn-sm { padding: 4px 16px; font-size: 15px; border-radius: 6px; font-weight: 600; }
+    .btn-success { background: #27ae60; color: #fff; border: none; }
+    .btn-primary { background: #2980b9; color: #fff; border: none; }
+    .btn-danger { background: #e74c3c; color: #fff; border: none; }
+    .btn-secondary { background: #888; color: #fff; border: none; }
+    .btn-success:hover { background: #219150; }
+    .btn-primary:hover { background: #206090; }
+    .btn-danger:hover { background: #c0392b; }
+    .btn-secondary:hover { background: #555; }
+    .update-form-row td { padding: 0 !important; }
+    @media (max-width: 900px) {
+      .sidebar-admin {
+        width: 70px;
+        padding: 16px 0 0 0;
+      }
+      .sidebar-admin .admin-name {
+        display: none;
+      }
+      .sidebar-admin ul li a {
+        padding: 16px 10px;
+        font-size: 0.9rem;
+        justify-content: center;
+      }
+      .main-admin-content {
+        margin-left: 70px;
+        width: calc(100% - 70px);
+        padding: 24px 6px 24px 6px;
+      }
+    }
+    @media (max-width: 600px) {
+      .dashboard-cards {
+        flex-direction: column;
+        gap: 18px;
+      }
+      .main-admin-content {
+        padding: 12px 2px 12px 2px;
+      }
+      .sidebar-admin {
+        position: absolute;
+        width: 250px;
+        height: 100vh;
+        top: 0;
+        left: -250px;
+        transition: left 0.3s;
+      }
+      .sidebar-admin.active {
+        left: 0;
+      }
+      .sidebar-toggle {
+        display: block;
+        position: absolute;
+        top: 16px;
+        left: 16px;
+        background: #2980b9;
+        color: #fff;
+        border: none;
+        border-radius: 6px;
+        padding: 10px;
+        cursor: pointer;
+        z-index: 11;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+      }
+    }
+    .modal-custom {
+      display: none;
+      position: fixed;
+      z-index: 9999;
+      left: 0;
+      top: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0,0,0,0.4);
+      justify-content: center;
+      align-items: center;
+    }
+    .modal-custom.active { display: flex; }
+    .modal-content-custom {
+      background: #fff;
+      padding: 32px 24px;
+      border-radius: 16px;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.18);
+      min-width: 320px;
+      max-width: 420px;
+      width: 95vw;
+      max-height: 90vh;
+      overflow-y: auto;
+      position: relative;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+    }
+    .close-modal {
+      position: absolute;
+      top: 12px;
+      right: 18px;
+      font-size: 2rem;
+      color: #888;
+      cursor: pointer;
+    }
+    @media (max-width: 600px) {
+      .modal-content-custom {
+        padding: 18px 6px;
+        min-width: 0;
+        max-width: 98vw;
+      }
+    }
+  </style>
+</head>
+<body class="admin-page">
+  <button class="sidebar-toggle" id="sidebarToggle" style="display:none;"><i class="fas fa-bars"></i></button>
+  <aside class="sidebar-admin" id="sidebarAdmin">
+    <div class="admin-avatar">
+      <img src="<%= homeInfo && homeInfo.logoUrl ? homeInfo.logoUrl : '' %>" alt="Admin Avatar">
+    </div>
+    <div class="admin-name">Panel Admin <%= homeInfo && homeInfo.TituloServicio1 ? homeInfo.TituloServicio1 : 'TituloServicio1' %></div>
+    <ul id="sidebar-menu">
+      <li><a href="/admin"><i class="fas fa-tachometer-alt"></i> Inicio</a></li>
+      <li><a href="/admin/services"><i class="fas fa-tags"></i><%= homeInfo && homeInfo.TituloServicio1 ? homeInfo.TituloServicio1 : 'TituloServicio1' %></a></li>
+      <li><a href="/admin/contact"><i class="fas fa-address-book"></i> Contactos</a></li>
+      <li><a href="/admin/galeria"><i class="fas fa-percent"></i><%= homeInfo && homeInfo.TituloServicio2 ? homeInfo.TituloServicio2 : 'TituloServicio2' %></a></li>
+      <li><a href="/admin/users"><i class="fas fa-users-cog"></i> Usuarios</a></li>
+      <li><a href="/logout"><i class="fas fa-sign-out-alt"></i> Cerrar Sesión</a></li>
+    </ul>
+  </aside>
+  <main class="main-admin-content">
+    <section style="max-width:900px;margin:40px auto 0 auto;">
+      <h2 style="text-align:center;margin-bottom:32px;">Administrar <%= homeInfo && homeInfo.TituloServicio1 ? homeInfo.TituloServicio1 : 'TituloServicio1' %></h2>
+      <!-- Modal de registro de celular -->
+      <div id="productModal" class="modal-custom" style="display:none;">
+        <div class="modal-content-custom">
+          <span class="close-modal" onclick="closeProductModal()">&times;</span>
+          <h3>Registrar <%= homeInfo && homeInfo.TituloServicio1 ? homeInfo.TituloServicio1 : 'TituloServicio1' %></h3>
+          <form action="/admin/services/add" method="post" class="service-form-admin" enctype="multipart/form-data">
+            <div class="form-group">
+              <label for="title">Nombre <%= homeInfo && homeInfo.TituloServicio1 ? homeInfo.TituloServicio1 : 'TituloServicio1' %>:</label>
+              <input type="text" id="title" name="title" required>
+            </div>
+            <div class="form-group">
+              <label for="description">Descripción:</label>
+              <textarea id="description" name="description" required></textarea>
+            </div>
+            <div class="form-group">
+              <label for="price">Precio:</label>
+              <input type="number" id="price" name="price" required>
+            </div>
+            <div class="form-group">
+              <label for="cantidad">Cantidad disponible:</label>
+              <input type="number" id="cantidad" name="cantidad" min="0" required>
+            </div>
+            <div class="form-group">
+              <label for="colores">Colores (separados por coma):</label>
+              <input type="text" id="colores" name="colores" placeholder="rojo, azul, verde">
+            </div>
+            <div class="form-group">
+              <label for="tallas">Tallas (separadas por coma):</label>
+              <input type="text" id="tallas" name="tallas" placeholder="S, M, L, XL">
+            </div>
+            <div class="form-group">
+              <label for="image">URL de la Imagen:</label>
+              <input type="text" id="image" name="image" placeholder="http://...">
+            </div>
+            <div class="form-group">
+              <label for="imageFile">O subir imagen:</label>
+              <input type="file" id="imageFile" name="imageFile" accept="image/*">
+            </div>
+            <button type="submit" class="btn btn-primary">Registrar <%= homeInfo && homeInfo.TituloServicio1 ? homeInfo.TituloServicio1 : 'TituloServicio1' %></button>
+            <button type="button" class="btn btn-secondary" onclick="closeProductModal()">Cancelar</button>
+          </form>
+        </div>
+      </div>
+      <!-- Modal de edición de celular -->
+      <div id="editProductModal" class="modal-custom" style="display:none;">
+        <div class="modal-content-custom">
+          <span class="close-modal" onclick="closeEditProductModal()">&times;</span>
+          <h3>Editar Celular</h3>
+          <form id="editProductForm" method="post" enctype="multipart/form-data">
+            <div class="form-group">
+              <label for="edit_title">Nombre <%= homeInfo && homeInfo.TituloServicio1 ? homeInfo.TituloServicio1 : 'TituloServicio1' %>:</label>
+              <input type="text" id="edit_title" name="title" required>
+            </div>
+            <div class="form-group">
+              <label for="edit_description">Descripción:</label>
+              <textarea id="edit_description" name="description" required></textarea>
+            </div>
+            <div class="form-group">
+              <label for="edit_price">Precio:</label>
+              <input type="number" id="edit_price" name="price" required>
+            </div>
+            <div class="form-group">
+              <label for="edit_cantidad">Cantidad disponible:</label>
+              <input type="number" id="edit_cantidad" name="cantidad" min="0" required>
+            </div>
+            <div class="form-group">
+              <label for="edit_colores">Colores (separados por coma):</label>
+              <input type="text" id="edit_colores" name="colores">
+            </div>
+            <div class="form-group">
+              <label for="edit_tallas">Tallas (separadas por coma):</label>
+              <input type="text" id="edit_tallas" name="tallas">
+            </div>
+            <div class="form-group">
+              <label for="edit_image">URL de la Imagen:</label>
+              <input type="text" id="edit_image" name="image">
+            </div>
+            <div class="form-group">
+              <label for="edit_imageFile">O subir imagen:</label>
+              <input type="file" id="edit_imageFile" name="imageFile" accept="image/*">
+            </div>
+            <button type="submit" class="btn btn-primary">Actualizar <%= homeInfo && homeInfo.TituloServicio1 ? homeInfo.TituloServicio1 : 'TituloServicio1' %></button>
+            <button type="button" class="btn btn-secondary" onclick="closeEditProductModal()">Cancelar</button>
+          </form>
+        </div>
+      </div>
+      <button class="btn btn-primary" style="margin-bottom:18px;" onclick="openProductModal()">Registrar <%= homeInfo && homeInfo.TituloServicio1 ? homeInfo.TituloServicio1 : 'TituloServicio1' %></button>
+      <div class="table-responsive">
+        <table class="table table-striped table-hover product-table">
+          <thead>
+            <tr>
+              <th>Nombre</th>
+              <th>Precio</th>
+              <th>Cantidad</th>
+              <th>Colores</th>
+              <th>Tallas</th>
+              <th>Imagen</th>
+              <th style="min-width:180px;">Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% services.forEach(service => { %>
+              <tr>
+                <td><%= service.title %></td>
+                <td>$<%= service.price %></td>
+                <td><%= service.cantidad %></td>
+                <td><%= service.colores ? service.colores.join(', ') : '' %></td>
+                <td><%= service.tallas ? service.tallas.join(', ') : '' %></td>
+                <td>
+                  <% if (service.image) { %>
+                    <img src="<%= service.image %>" alt="<%= service.title %>" style="width:40px;height:40px;object-fit:cover;border-radius:6px;">
+                  <% } %>
+                </td>
+                <td>
+                  <a href="/admin/services/view/<%= service._id %>" class="btn btn-success btn-sm" style="margin-right:4px;">Ver</a>
+                  <button class="btn btn-primary btn-sm btn-edit-product" data-product='<%= JSON.stringify(service) %>' style="margin-right:4px;">Editar</button>
+                  <form action="/admin/services/delete/<%= service._id %>" method="post" style="display:inline;" onsubmit="return confirmDelete(event)">
+                    <button type="submit" class="btn btn-danger btn-sm">Eliminar</button>
+                  </form>
+                </td>
+              </tr>
+            <% }); %>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+  <div id="deleteModal" class="modal-custom" style="display:none;">
+    <div class="modal-content-custom">
+      <span class="close-modal" onclick="closeDeleteModal()">&times;</span>
+      <h3>¿Estás seguro que deseas eliminar este <%= homeInfo && homeInfo.TituloServicio1 ? homeInfo.TituloServicio1 : 'TituloServicio1' %>?</h3>
+      <div style="display:flex;gap:16px;justify-content:center;margin-top:24px;">
+        <button class="btn btn-danger" onclick="confirmDeleteAction()">Sí, eliminar</button>
+        <button class="btn btn-secondary" onclick="closeDeleteModal()">No, cancelar</button>
+      </div>
+    </div>
+  </div>
+  <script>
+    let deleteFormRef = null;
+    function openDeleteModal(form) {
+      deleteFormRef = form;
+      document.getElementById('deleteModal').style.display = 'flex';
+      document.getElementById('deleteModal').classList.add('active');
+    }
+    function closeDeleteModal() {
+      document.getElementById('deleteModal').style.display = 'none';
+      document.getElementById('deleteModal').classList.remove('active');
+      deleteFormRef = null;
+    }
+    function confirmDeleteAction() {
+      if(deleteFormRef) deleteFormRef.submit();
+      closeDeleteModal();
+    }
+    function openProductModal() {
+      document.getElementById('productModal').style.display = 'flex';
+      document.getElementById('productModal').classList.add('active');
+    }
+    function closeProductModal() {
+      document.getElementById('productModal').style.display = 'none';
+      document.getElementById('productModal').classList.remove('active');
+    }
+    function openEditProductModal(product) {
+      document.getElementById('editProductForm').action = '/admin/services/update/' + product._id;
+      document.getElementById('edit_title').value = product.title;
+      document.getElementById('edit_description').value = product.description;
+      document.getElementById('edit_price').value = product.price;
+      document.getElementById('edit_cantidad').value = product.cantidad;
+      document.getElementById('edit_colores').value = (product.colores || []).join(', ');
+      document.getElementById('edit_tallas').value = (product.tallas || []).join(', ');
+      document.getElementById('edit_image').value = product.image || '';
+      document.getElementById('edit_imageFile').value = '';
+      document.getElementById('editProductModal').style.display = 'flex';
+      document.getElementById('editProductModal').classList.add('active');
+    }
+    function closeEditProductModal() {
+      document.getElementById('editProductModal').style.display = 'none';
+      document.getElementById('editProductModal').classList.remove('active');
+    }
+    function confirmDelete(e) {
+      if (!confirm('¿Estás seguro de que deseas eliminar este celular?')) {
+        e.preventDefault();
+        return false;
+      }
+      return true;
+    }
+    // Script para marcar solo la pestaña activa
+    document.addEventListener('DOMContentLoaded', function() {
+      const menu = document.getElementById('sidebar-menu');
+      if(menu) {
+        const links = menu.querySelectorAll('a');
+        const current = window.location.pathname;
+        links.forEach(link => {
+          if(link.getAttribute('href') && current.startsWith(link.getAttribute('href')) && link.getAttribute('href') !== '/logout') {
+            links.forEach(l => l.classList.remove('active'));
+            link.classList.add('active');
+          }
+        });
+      }
+    });
+    // Interceptar todos los formularios de eliminar
+    window.addEventListener('DOMContentLoaded',()=>{
+      document.querySelectorAll('form[action^="/admin/services/delete/"]').forEach(form => {
+        form.onsubmit = function(e) {
+          e.preventDefault();
+          openDeleteModal(form);
+          return false;
+        };
+      });
+    });
+    document.addEventListener('DOMContentLoaded', function() {
+      const sidebar = document.getElementById('sidebarAdmin');
+      const toggle = document.getElementById('sidebarToggle');
+      function checkSidebar() {
+        if(window.innerWidth <= 600) {
+          toggle.style.display = 'block';
+          sidebar.classList.remove('active');
+        } else {
+          toggle.style.display = 'none';
+          sidebar.classList.remove('active');
+        }
+      }
+      toggle.onclick = function() {
+        sidebar.classList.toggle('active');
+      };
+      window.addEventListener('resize', checkSidebar);
+      checkSidebar();
+    });
+    // Reemplaza el botón Editar en la tabla para abrir el modal
+    window.addEventListener('DOMContentLoaded',()=>{
+      document.querySelectorAll('.btn-edit-product').forEach(btn => {
+        btn.onclick = function() {
+          const product = JSON.parse(this.dataset.product);
+          openEditProductModal(product);
+        };
+      });
+    });
+  </script>
+</body>
+</html>

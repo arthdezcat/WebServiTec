@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Inicio - <%= homeInfo && homeInfo.nombreLocal ? homeInfo.nombreLocal : "Moda Hombre D'Angelo" %></title>
+  <link rel="stylesheet" href="/css/styles.css">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+  <link rel="icon" href="<%= homeInfo && homeInfo.iconUrl ? homeInfo.iconUrl : (homeInfo && homeInfo.logoUrl ? homeInfo.logoUrl : '') %>" type="image/png">
+  <style>
+    body {
+      background: #fff;
+      margin: 0;
+      font-family: 'Montserrat', Arial, sans-serif;
+    }
+    .hero {
+      position: relative;
+      width: 100vw;
+      min-height: 420px;
+      background: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 16px;
+      box-sizing: border-box;
+    }
+    .hero-overlay {
+      display: none;
+    }
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      text-align: center;
+      color: #222;
+      width: 100%;
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 32px 0;
+      box-sizing: border-box;
+    }
+    .hero-content h1 {
+      font-size: 3rem;
+      font-weight: 800;
+      margin-bottom: 18px;
+      letter-spacing: 1px;
+      text-shadow: 0 2px 12px rgba(0,0,0,0.08);
+      word-break: break-word;
+    }
+    .hero-content h2 {
+      font-size: 1.5rem;
+      font-weight: 400;
+      margin-bottom: 18px;
+      color: #444;
+      word-break: break-word;
+    }
+    .hero-content p {
+      max-width: 700px;
+      margin: 0 auto 18px auto;
+      font-size: 1.1rem;
+      color: #444;
+      word-break: break-word;
+    }
+    .hero-content .btn-coleccion {
+      background: transparent;
+      border: 2px solid #222;
+      color: #222;
+      font-size: 1.2rem;
+      padding: 12px 36px;
+      border-radius: 30px;
+      font-weight: 600;
+      transition: background 0.3s, color 0.3s;
+      margin-top: 18px;
+      cursor: pointer;
+    }
+    .hero-content .btn-coleccion:hover {
+      background: #222;
+      color: #fff;
+    }
+    .slider-container {
+      position: relative;
+      max-width: 900px;
+      margin: 0 auto 32px auto;
+      background: #fff;
+      border-radius: 0;
+      box-shadow: none;
+      overflow: visible;
+      padding: 0;
+      width: 100%;
+    }
+    .slider {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+      width: 100%;
+      min-height: 220px;
+      overflow: visible;
+      background: #fff;
+      gap: 0;
+    }
+    .slide {
+      display: none;
+      width: 260px;
+      min-width: 260px;
+      max-width: 260px;
+      transition: opacity 0.5s, filter 0.5s, transform 0.5s, z-index 0.5s;
+      position: absolute;
+      left: 50%;
+      top: 0;
+      transform: translateX(-50%) scale(0.92);
+      opacity: 0;
+      filter: blur(8px) grayscale(0.2);
+      z-index: 1;
+      box-sizing: border-box;
+    }
+    .slide.active {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      opacity: 1;
+      filter: none;
+      z-index: 3;
+      transform: translateX(-50%) scale(1.08);
+    }
+    .slide.next {
+      display: flex;
+      opacity: 0.7;
+      filter: blur(6px) grayscale(0.3);
+      z-index: 2;
+      transform: translateX(80%) scale(0.96);
+    }
+    .slide.prev {
+      display: flex;
+      opacity: 0.7;
+      filter: blur(6px) grayscale(0.3);
+      z-index: 2;
+      transform: translateX(-180%) scale(0.96);
+    }
+    .slide img {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+      border-radius: 8px;
+      box-shadow: none;
+      margin-bottom: 10px;
+      background: #f5f5f5;
+      max-width: 100%;
+      display: block;
+    }
+    .slide-title {
+      color: #222;
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin-bottom: 0;
+      margin-top: 0;
+      text-align: center;
+      word-break: break-word;
+    }
+    .slider-btn {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: transparent;
+      color: #222;
+      border: none;
+      border-radius: 50%;
+      width: 36px;
+      height: 36px;
+      font-size: 2rem;
+      cursor: pointer;
+      z-index: 2;
+      box-shadow: none;
+      transition: background 0.2s, color 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .slider-btn:hover {
+      background: #f0f0f0;
+      color: #111;
+    }
+    .slider-btn.prev { left: -40px; }
+    .slider-btn.next { right: -40px; }
+    .slider-dots {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 8px;
+      margin-top: 12px;
+      position: static;
+    }
+    .slider-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #bbb;
+      opacity: 0.7;
+      cursor: pointer;
+      border: none;
+      transition: opacity 0.2s, background 0.2s;
+    }
+    .slider-dot.active {
+      background: #222;
+      opacity: 1;
+    }
+
+    /* RESPONSIVE */
+    @media (max-width: 900px) {
+      .hero-content, .slider-container {
+        max-width: 99vw;
+        padding-left: 8px;
+        padding-right: 8px;
+      }
+      .slide, .slide img {
+        width: 180px;
+        min-width: 120px;
+        max-width: 220px;
+        height: 120px;
+      }
+      .slider-btn.prev { left: -16px; }
+      .slider-btn.next { right: -16px; }
+    }
+    @media (max-width: 700px) {
+      .hero-content h1, .section-title { font-size: 2rem; }
+      .hero-content h2 { font-size: 1.1rem; }
+      .slider-container { max-width: 99vw; }
+      .slide, .slide img { height: 100px; width: 120px; min-width: 100px; max-width: 140px; }
+      .slide.next { transform: translateX(60%) scale(0.96); }
+      .slide.prev { transform: translateX(-120%) scale(0.96); }
+      .slide.active { transform: translateX(-50%) scale(1.04); }
+      .slider-btn.prev { left: -10px; }
+      .slider-btn.next { right: -10px; }
+    }
+    @media (max-width: 500px) {
+      .hero-content h1, .section-title { font-size: 1.2rem; }
+      .hero-content h2 { font-size: 1rem; }
+      .hero-content p, .section-desc { font-size: 1rem; }
+      .slide, .slide img { height: 80px; width: 90vw; min-width: 0; max-width: 98vw; }
+      .slider-container { padding: 0 2px; }
+    }
+    @media (max-width: 400px) {
+      .slide img { height: 60px; border-radius: 6px; }
+      .slider-btn { width: 28px; height: 28px; font-size: 1.2rem; }
+      .slider-btn.prev { left: 0; }
+      .slider-btn.next { right: 0; }
+      .hero-content, .section, .info-section { padding: 8px 2px; }
+    }
+
+    /* RESPONSIVE UNIVERSAL PARA TODAS LAS VISTAS */
+    @media (max-width: 900px) {
+      .hero-content, .slider-container, .section, .info-section {
+        max-width: 99vw;
+        padding-left: 8px;
+        padding-right: 8px;
+        box-sizing: border-box;
+      }
+      .slide, .slide img {
+        width: 180px;
+        min-width: 120px;
+        max-width: 220px;
+        height: 120px;
+      }
+      .slider-btn.prev { left: -16px; }
+      .slider-btn.next { right: -16px; }
+    }
+    @media (max-width: 700px) {
+      .hero-content h1, .section-title { font-size: 2rem; }
+      .hero-content h2 { font-size: 1.1rem; }
+      .slider-container { max-width: 99vw; }
+      .slide, .slide img { height: 100px; width: 120px; min-width: 100px; max-width: 140px; }
+      .slide.next { transform: translateX(60%) scale(0.96); }
+      .slide.prev { transform: translateX(-120%) scale(0.96); }
+      .slide.active { transform: translateX(-50%) scale(1.04); }
+      .slider-btn.prev { left: -10px; }
+      .slider-btn.next { right: -10px; }
+    }
+    @media (max-width: 500px) {
+      .hero-content h1, .section-title { font-size: 1.2rem; }
+      .hero-content h2 { font-size: 1rem; }
+      .hero-content p, .section-desc { font-size: 1rem; }
+      .slide, .slide img { height: 80px; width: 90vw; min-width: 0; max-width: 98vw; }
+      .slider-container { padding: 0 2px; }
+    }
+    @media (max-width: 400px) {
+      .slide img { height: 60px; border-radius: 6px; }
+      .slider-btn { width: 28px; height: 28px; font-size: 1.2rem; }
+      .slider-btn.prev { left: 0; }
+      .slider-btn.next { right: 0; }
+      .hero-content, .section, .info-section { padding: 8px 2px; }
+    }
+
+    /* Ajuste para textos largos y desbordes */
+    .hero-content, .section, .info-section {
+      word-break: break-word;
+      overflow-wrap: break-word;
+    }
+
+    /* Ajuste universal para imágenes */
+    img, .slide img {
+      max-width: 100%;
+      height: auto;
+      display: block;
+      object-fit: cover;
+    }
+  </style>
+</head>
+<body>
+  <%- include('../partials/header') %>
+  <div class="hero">
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      <h1><%= homeInfo && homeInfo.nombreLocal ? homeInfo.nombreLocal : 'Bienvenido a nuestra tienda' %></h1>
+      <% if (homeInfo && homeInfo.slogan) { %>
+        <h2 style="font-weight:400;margin-bottom:18px;"> <%= homeInfo.slogan %> </h2>
+      <% } %>
+      <% if (homeInfo && homeInfo.descripcion) { %>
+        <p style="max-width:600px;margin:0 auto 18px auto;font-size:1.1rem;color:#444;"> <%= homeInfo.descripcion %> </p>
+      <% } %>
+      <h1><%= homeInfo && homeInfo.TituloServicio1 ? homeInfo.TituloServicio1 : 'TituloServicio1' %></h1>
+      <% if (sliderImages && sliderImages.length > 0) { %>
+        <div class="slider-container">
+          <button class="slider-btn prev" onclick="moveSlide(-1)">&#10094;</button>
+          <div class="slider" id="slider">
+        <% sliderImages.forEach(function(img, idx) { %>
+          <div class="slide<%= idx === 0 ? ' active' : '' %>" data-index="<%= idx %>">
+            <img src="<%= img.image %>" alt="<%= img.title %>" />
+            <div class="slide-title"><%= img.title || '' %></div>
+          </div>
+        <% }); %>
+          </div>
+          <button class="slider-btn next" onclick="moveSlide(1)">&#10095;</button>
+          <div class="slider-dots" id="slider-dots"></div>
+        </div>
+        <script>
+          let currentSlide = 0;
+          const slides = document.querySelectorAll('#slider .slide');
+          const sliderDots = document.getElementById('slider-dots');
+          function showSlide(n) {
+        slides.forEach((slide, i) => {
+          slide.classList.remove('active', 'next', 'prev');
+          slide.style.display = 'none';
+        });
+        // Mostrar solo prev, active y next
+        const prevIdx = (n - 1 + slides.length) % slides.length;
+        const nextIdx = (n + 1) % slides.length;
+        slides[prevIdx].classList.add('prev');
+        slides[prevIdx].style.display = 'flex';
+        slides[n].classList.add('active');
+        slides[n].style.display = 'flex';
+        slides[nextIdx].classList.add('next');
+        slides[nextIdx].style.display = 'flex';
+        Array.from(sliderDots.children).forEach((dot, i) => {
+          dot.classList.toggle('active', i === n);
+        });
+          }
+          function moveSlide(dir) {
+        currentSlide += dir;
+        if (currentSlide < 0) currentSlide = slides.length - 1;
+        if (currentSlide >= slides.length) currentSlide = 0;
+        showSlide(currentSlide);
+          }
+          function goToSlide(idx) {
+        currentSlide = idx;
+        showSlide(currentSlide);
+          }
+          // Crear dots
+          sliderDots.innerHTML = '';
+          slides.forEach((_, i) => {
+        const dot = document.createElement('div');
+        dot.className = 'slider-dot' + (i === 0 ? ' active' : '');
+        dot.onclick = () => goToSlide(i);
+        sliderDots.appendChild(dot);
+          });
+          showSlide(currentSlide);
+          setInterval(() => moveSlide(1), 4000);
+        </script>
+      <% } %>
+      <div style="height:32px;"></div>
+      <h1><%= homeInfo && homeInfo.TituloServicio2 ? homeInfo.TituloServicio2 : 'TituloServicio2' %></h1>
+      <% if (galeriaImages && galeriaImages.length > 0) { %>
+        <div class="slider-container">
+          <button class="slider-btn prev" onclick="moveGaleriaSlide(-1)">&#10094;</button>
+          <div class="slider" id="slider-ofertas">
+        <% galeriaImages.forEach(function(img, idx) { %>
+          <div class="slide<%= idx === 0 ? ' active' : '' %>" data-index="<%= idx %>">
+            <img src="<%= img.image %>" alt="<%= img.title %>" />
+            <div class="slide-title"><%= img.title || '' %></div>
+          </div>
+        <% }); %>
+          </div>
+          <button class="slider-btn next" onclick="moveGaleriaSlide(1)">&#10095;</button>
+          <div class="slider-dots" id="slider-computadoras-dots"></div>
+        </div>
+        <script>
+          let currentGaleriaSlide = 0;
+          const galeriaSlides = document.querySelectorAll('#slider-ofertas .slide');
+          const galeriaDots = document.getElementById('slider-computadoras-dots');
+          function showGaleriaSlide(n) {
+        galeriaSlides.forEach((slide, i) => {
+          slide.classList.remove('active', 'next', 'prev');
+          slide.style.display = 'none';
+        });
+        // Mostrar solo prev, active y next
+        const prevIdx = (n - 1 + galeriaSlides.length) % galeriaSlides.length;
+        const nextIdx = (n + 1) % galeriaSlides.length;
+        galeriaSlides[prevIdx].classList.add('prev');
+        galeriaSlides[prevIdx].style.display = 'flex';
+        galeriaSlides[n].classList.add('active');
+        galeriaSlides[n].style.display = 'flex';
+        galeriaSlides[nextIdx].classList.add('next');
+        galeriaSlides[nextIdx].style.display = 'flex';
+        Array.from(galeriaDots.children).forEach((dot, i) => {
+          dot.classList.toggle('active', i === n);
+        });
+          }
+          function moveGaleriaSlide(dir) {
+        currentGaleriaSlide += dir;
+        if (currentGaleriaSlide < 0) currentGaleriaSlide = galeriaSlides.length - 1;
+        if (currentGaleriaSlide >= galeriaSlides.length) currentGaleriaSlide = 0;
+        showGaleriaSlide(currentGaleriaSlide);
+          }
+          function goToGaleriaSlide(idx) {
+        currentGaleriaSlide = idx;
+        showGaleriaSlide(currentGaleriaSlide);
+          }
+          // Crear dots
+          galeriaDots.innerHTML = '';
+          galeriaSlides.forEach((_, i) => {
+        const dot = document.createElement('div');
+        dot.className = 'slider-dot' + (i === 0 ? ' active' : '');
+        dot.onclick = () => goToGaleriaSlide(i);
+        galeriaDots.appendChild(dot);
+          });
+          showGaleriaSlide(currentGaleriaSlide);
+          setInterval(() => moveGaleriaSlide(1), 4000);
+        </script>
+      <% } %>
+    </div>
+  </div>
+  <!--
+  <div class="sidebar-social">
+    <a href="#"><i class="fab fa-facebook-f"></i></a>
+    <a href="#"><i class="fab fa-twitter"></i></a>
+    <a href="#"><i class="fab fa-instagram"></i></a>
+  </div>-->
+  <%- include('../partials/footer') %>
+</body>
+</html>
