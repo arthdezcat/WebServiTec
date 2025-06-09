@@ -281,7 +281,7 @@
   <main class="main-admin-content">
     <section style="max-width:900px;margin:40px auto 0 auto;">
       <h2 style="text-align:center;margin-bottom:32px;">Administrar <%= homeInfo && homeInfo.TituloServicio1 ? homeInfo.TituloServicio1 : 'TituloServicio1' %></h2>
-      <!-- Modal de registro de celular -->
+      <!-- Modal de registro de servicio -->
       <div id="productModal" class="modal-custom" style="display:none;">
         <div class="modal-content-custom">
           <span class="close-modal" onclick="closeProductModal()">&times;</span>
@@ -297,19 +297,11 @@
             </div>
             <div class="form-group">
               <label for="price">Precio:</label>
-              <input type="number" id="price" name="price" required>
+              <input type="number" id="price" name="price" min="0" step="0.01">
             </div>
             <div class="form-group">
-              <label for="cantidad">Cantidad disponible:</label>
-              <input type="number" id="cantidad" name="cantidad" min="0" required>
-            </div>
-            <div class="form-group">
-              <label for="colores">Colores (separados por coma):</label>
-              <input type="text" id="colores" name="colores" placeholder="rojo, azul, verde">
-            </div>
-            <div class="form-group">
-              <label for="tallas">Tallas (separadas por coma):</label>
-              <input type="text" id="tallas" name="tallas" placeholder="S, M, L, XL">
+              <label for="garantia">Garantía:</label>
+              <textarea id="garantia" name="garantia"></textarea>
             </div>
             <div class="form-group">
               <label for="image">URL de la Imagen:</label>
@@ -319,16 +311,16 @@
               <label for="imageFile">O subir imagen:</label>
               <input type="file" id="imageFile" name="imageFile" accept="image/*">
             </div>
-            <button type="submit" class="btn btn-primary">Registrar <%= homeInfo && homeInfo.TituloServicio1 ? homeInfo.TituloServicio1 : 'TituloServicio1' %></button>
+            <button type="submit" class="btn btn-primary">Registrar</button>
             <button type="button" class="btn btn-secondary" onclick="closeProductModal()">Cancelar</button>
           </form>
         </div>
       </div>
-      <!-- Modal de edición de celular -->
+      <!-- Modal de edición -->
       <div id="editProductModal" class="modal-custom" style="display:none;">
         <div class="modal-content-custom">
           <span class="close-modal" onclick="closeEditProductModal()">&times;</span>
-          <h3>Editar Celular</h3>
+          <h3>Editar <%= homeInfo && homeInfo.TituloServicio1 ? homeInfo.TituloServicio1 : 'TituloServicio1' %></h3>
           <form id="editProductForm" method="post" enctype="multipart/form-data">
             <div class="form-group">
               <label for="edit_title">Nombre <%= homeInfo && homeInfo.TituloServicio1 ? homeInfo.TituloServicio1 : 'TituloServicio1' %>:</label>
@@ -340,19 +332,11 @@
             </div>
             <div class="form-group">
               <label for="edit_price">Precio:</label>
-              <input type="number" id="edit_price" name="price" required>
+              <input type="number" id="edit_price" name="price" min="0" step="0.01">
             </div>
             <div class="form-group">
-              <label for="edit_cantidad">Cantidad disponible:</label>
-              <input type="number" id="edit_cantidad" name="cantidad" min="0" required>
-            </div>
-            <div class="form-group">
-              <label for="edit_colores">Colores (separados por coma):</label>
-              <input type="text" id="edit_colores" name="colores">
-            </div>
-            <div class="form-group">
-              <label for="edit_tallas">Tallas (separadas por coma):</label>
-              <input type="text" id="edit_tallas" name="tallas">
+              <label for="edit_garantia">Garantía:</label>
+              <textarea id="edit_garantia" name="garantia"></textarea>
             </div>
             <div class="form-group">
               <label for="edit_image">URL de la Imagen:</label>
@@ -373,10 +357,9 @@
           <thead>
             <tr>
               <th>Nombre</th>
+              <th>Descripción</th>
               <th>Precio</th>
-              <th>Cantidad</th>
-              <th>Colores</th>
-              <th>Tallas</th>
+              <th>Garantía</th>
               <th>Imagen</th>
               <th style="min-width:70px;width:1%;text-align:center;">Acciones</th>
             </tr>
@@ -385,10 +368,9 @@
             <% services.forEach(service => { %>
               <tr>
                 <td><%= service.title %></td>
-                <td>$<%= service.price %></td>
-                <td><%= service.cantidad %></td>
-                <td><%= service.colores ? service.colores.join(', ') : '' %></td>
-                <td><%= service.tallas ? service.tallas.join(', ') : '' %></td>
+                <td><%= service.description %></td>
+                <td><%= service.price ? '$' + service.price : '' %></td>
+                <td><%= service.garantia %></td>
                 <td>
                   <% if (service.image) { %>
                     <img src="<%= service.image %>" alt="<%= service.title %>" style="width:40px;height:40px;object-fit:cover;border-radius:6px;">
@@ -415,6 +397,14 @@
         <button class="btn btn-danger" onclick="confirmDeleteAction()">Sí, eliminar</button>
         <button class="btn btn-secondary" onclick="closeDeleteModal()">No, cancelar</button>
       </div>
+    </div>
+  </div>
+  <!-- Modal de formulario dinámico -->
+  <div id="formularioDinamicoModal" class="modal-custom" style="display:none;">
+    <div class="modal-content-custom">
+      <span class="close-modal" onclick="closeFormularioDinamicoModal()">&times;</span>
+      <h3 id="tituloFormularioDinamico">Registrar</h3>
+      <form id="formularioDinamico" action="/admin/services/add" method="post" enctype="multipart/form-data"></form>
     </div>
   </div>
   <script>
@@ -444,11 +434,9 @@
     function openEditProductModal(product) {
       document.getElementById('editProductForm').action = '/admin/services/update/' + product._id;
       document.getElementById('edit_title').value = product.title;
-      document.getElementById('edit_description').value = product.description;
-      document.getElementById('edit_price').value = product.price;
-      document.getElementById('edit_cantidad').value = product.cantidad;
-      document.getElementById('edit_colores').value = (product.colores || []).join(', ');
-      document.getElementById('edit_tallas').value = (product.tallas || []).join(', ');
+      document.getElementById('edit_description').value = product.description || '';
+      document.getElementById('edit_price').value = product.price || '';
+      document.getElementById('edit_garantia').value = product.garantia || '';
       document.getElementById('edit_image').value = product.image || '';
       document.getElementById('edit_imageFile').value = '';
       document.getElementById('editProductModal').style.display = 'flex';
@@ -459,11 +447,67 @@
       document.getElementById('editProductModal').classList.remove('active');
     }
     function confirmDelete(e) {
-      if (!confirm('¿Estás seguro de que deseas eliminar este celular?')) {
+      if (!confirm('¿Estás seguro de que deseas eliminar este servicio?')) {
         e.preventDefault();
         return false;
       }
       return true;
+    }
+    function closeFormularioDinamicoModal() {
+      document.getElementById('formularioDinamicoModal').style.display = 'none';
+      document.getElementById('formularioDinamicoModal').classList.remove('active');
+    }
+    function seleccionarTipoRegistro(tipo) {
+      closeTipoRegistroModal();
+      let form = document.getElementById('formularioDinamico');
+      let titulo = document.getElementById('tituloFormularioDinamico');
+      form.innerHTML = '';
+      let campos = [
+        {label:'Nombre', name:'title', type:'text', required:true},
+        {label:'Descripción', name:'description', type:'textarea', required:true},
+        {label:'Precio (opcional)', name:'price', type:'number', required:false},
+        {label:'URL de la imagen', name:'image', type:'text', required:false},
+        {label:'O subir imagen', name:'imageFile', type:'file', required:false},
+        {label:'Garantía', name:'garantia', type:'textarea', required:false}
+      ];
+      titulo.textContent = 'Registrar Nuevo';
+      form.action = '/admin/services/add';
+      campos.forEach(c => {
+        let div = document.createElement('div');
+        div.className = 'form-group';
+        let label = document.createElement('label');
+        label.textContent = c.label;
+        label.htmlFor = c.name;
+        div.appendChild(label);
+        let input;
+        if(c.type === 'textarea') {
+          input = document.createElement('textarea');
+          input.name = c.name;
+          input.id = c.name;
+          if(c.required) input.required = true;
+        } else {
+          input = document.createElement('input');
+          input.type = c.type;
+          input.name = c.name;
+          input.id = c.name;
+          if(c.required) input.required = true;
+        }
+        div.appendChild(input);
+        form.appendChild(div);
+      });
+      let btnSubmit = document.createElement('button');
+      btnSubmit.type = 'submit';
+      btnSubmit.className = 'btn btn-primary';
+      btnSubmit.textContent = 'Registrar';
+      form.appendChild(btnSubmit);
+      let btnCancel = document.createElement('button');
+      btnCancel.type = 'button';
+      btnCancel.className = 'btn btn-secondary';
+      btnCancel.textContent = 'Cancelar';
+      btnCancel.onclick = closeFormularioDinamicoModal;
+      form.appendChild(btnCancel);
+      document.getElementById('formularioDinamicoModal').style.display = 'flex';
+      document.getElementById('formularioDinamicoModal').classList.add('active');
     }
     // Script para marcar solo la pestaña activa
     document.addEventListener('DOMContentLoaded', function() {
@@ -515,6 +559,10 @@
           openEditProductModal(product);
         };
       });
+    });
+    document.addEventListener('DOMContentLoaded', function() {
+      let btn = document.querySelector('button.btn.btn-primary[onclick]');
+      if(btn) btn.onclick = openProductModal;
     });
   </script>
 </body>

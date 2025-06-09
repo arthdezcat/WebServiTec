@@ -124,7 +124,19 @@
     }
   </style>
 </head>
-<body>
+<body style="<% if (homeInfo && homeInfo.colorFondo) { %>background:<%= homeInfo.colorFondo %>;<% } else if (homeInfo && homeInfo.fondoUrl) { %>background-image:url('<%= homeInfo.fondoUrl %>');background-size:cover;background-position:center;<% } else if (homeInfo && homeInfo.fondoFiles && homeInfo.fondoFiles.length >= 4) { %>background-image:url('<%= homeInfo.fondoFiles[0] %>');background-size:cover;background-position:center;<% } %>;transition: background 1s;">
+  <% if (homeInfo && homeInfo.fondoFiles && homeInfo.fondoFiles.length >= 4) { %>
+  <script>
+    var fondoImgs = JSON.parse('<%= JSON.stringify(homeInfo.fondoFiles) %>');
+    var fondoIdx = 0;
+    setInterval(function() {
+      fondoIdx = (fondoIdx + 1) % fondoImgs.length;
+      document.body.style.backgroundImage = 'url(' + fondoImgs[fondoIdx] + ')';
+      document.body.style.backgroundSize = 'cover';
+      document.body.style.backgroundPosition = 'center';
+    }, 6000);
+  </script>
+  <% } %>
   <%- include('../partials/header') %>
   <section class="tienda-section">
     <h2 class="tienda-title"><%= homeInfo && homeInfo.TituloServicio1 ? homeInfo.TituloServicio1 : 'TituloServicio1' %></h2>
@@ -133,11 +145,13 @@
         <div class="card-producto">
           <img src="<%= service.image %>" alt="<%= service.title %>" class="producto-img card-img-modal" onclick="openImgModal(this)">
           <div class="nombre"><%= service.title %></div>
-          <div class="precio">$<%= service.price %></div>
           <div class="descripcion"><%= service.description %></div>
-          <div class="descripcion">Cantidad disponible: <%= service.cantidad %></div>
-          <div class="descripcion">Colores: <%= service.colores ? service.colores.join(', ') : '' %></div>
-          <div class="descripcion">Tallas: <%= service.tallas ? service.tallas.join(', ') : '' %></div>
+          <% if (service.price) { %>
+            <div class="precio">Precio: $<%= service.price %></div>
+          <% } %>
+          <% if (service.garantia) { %>
+            <div class="descripcion"><strong>Garantía:</strong> <%= service.garantia %></div>
+          <% } %>
         </div>
       <% }); %>
     </div>

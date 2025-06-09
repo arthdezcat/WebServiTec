@@ -1,11 +1,11 @@
-const Celular = require('../models/Service');
+const ServicePrincipali = require('../models/Service');
 const path = require('path');
 const { cloudinary } = require('../middlewares/cloudinary');
 
 // Obtener todos los servicios
 exports.getServices = async (req, res) => {
   try {
-    const celulares = await Celular.find();
+    const celulares = await ServicePrincipali.find();
     res.render('pages/services', { services: celulares, homeInfo: res.locals.homeInfo });
   } catch (error) {
     console.error(error);
@@ -20,17 +20,13 @@ exports.addService = async (req, res) => {
     if (req.file && req.file.path) {
       image = req.file.path; // URL de Cloudinary
     }
-    const { title, description, price, cantidad, colores, tallas } = req.body;
-    const coloresArray = colores ? colores.split(',').map(c => c.trim()) : [];
-    const tallasArray = tallas ? tallas.split(',').map(t => t.trim()) : [];
-    const newCelular = new Celular({
+    const { title, description, price, garantia } = req.body;
+    const newCelular = new ServicePrincipali({
       title,
       description,
-      price,
-      image,
-      cantidad,
-      colores: coloresArray,
-      tallas: tallasArray
+      price: price || undefined,
+      garantia,
+      image
     });
     await newCelular.save();
     res.redirect('/admin/services');
@@ -45,7 +41,7 @@ exports.updateService = async (req, res) => {
   try {
     const { id } = req.params;
     let image = req.body.image;
-    const servicio = await Celular.findById(id);
+    const servicio = await ServicePrincipali.findById(id);
     if (req.file && req.file.path) {
       image = req.file.path;
       if (servicio && servicio.image && servicio.image.includes('cloudinary.com')) {
@@ -53,17 +49,13 @@ exports.updateService = async (req, res) => {
         await cloudinary.uploader.destroy('webservitec/' + publicId);
       }
     }
-    const { title, description, price, cantidad, colores, tallas } = req.body;
-    const coloresArray = colores ? colores.split(',').map(c => c.trim()) : [];
-    const tallasArray = tallas ? tallas.split(',').map(t => t.trim()) : [];
-    await Celular.findByIdAndUpdate(id, {
+    const { title, description, price, garantia } = req.body;
+    await ServicePrincipali.findByIdAndUpdate(id, {
       title,
       description,
-      price,
-      image,
-      cantidad,
-      colores: coloresArray,
-      tallas: tallasArray
+      price: price || undefined,
+      garantia,
+      image
     });
     res.redirect('/admin/services');
   } catch (error) {
@@ -76,12 +68,12 @@ exports.updateService = async (req, res) => {
 exports.deleteService = async (req, res) => {
   try {
     const { id } = req.params;
-    const servicio = await Celular.findById(id);
+    const servicio = await ServicePrincipali.findById(id);
     if (servicio && servicio.image && servicio.image.includes('cloudinary.com')) {
       const publicId = servicio.image.split('/').slice(-1)[0].split('.')[0];
       await cloudinary.uploader.destroy('webservitec/' + publicId);
     }
-    await Celular.findByIdAndDelete(id);
+    await ServicePrincipali.findByIdAndDelete(id);
     res.redirect('/admin/services');
   } catch (error) {
     console.error(error);

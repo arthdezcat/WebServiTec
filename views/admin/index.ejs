@@ -333,7 +333,7 @@
       <div class="dashboard-card">
         <img src="<%= homeInfo && homeInfo.logoUrl ? homeInfo.logoUrl : '/img/LogoOfic.png' %>" alt="Ver tienda pública">
         <div class="nombre">Ver Tienda Pública</div>
-        <div class="descripcion">Ir a la página pública de Celulares.</div>
+        <div class="descripcion">Ir a la página pública de Servicios principales.</div>
         <a href="/" class="btn">Ir a la Web Pública</a>
       </div>
     </div>
@@ -387,6 +387,24 @@
         <label>Título de Servicio 2:</label>
         <input type="text" name="TituloServicio2" value="<%= homeInfo && homeInfo.TituloServicio2 ? homeInfo.TituloServicio2 : '' %>" required><br>
         </div>
+        <div class="form-group">
+        <label>Fondo de la página:</label>
+        <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap;">
+          <div>
+            <label for="colorFondo">Color de fondo</label>
+            <input type="color" id="colorFondo" name="colorFondo" value="<%= homeInfo && homeInfo.colorFondo ? homeInfo.colorFondo : '#ffffff' %>">
+          </div>
+          <div>
+            <label for="fondoUrl">URL de imagen de fondo</label>
+            <input type="text" id="fondoUrl" name="fondoUrl" value="<%= homeInfo && homeInfo.fondoUrl ? homeInfo.fondoUrl : '' %>" placeholder="http://...">
+          </div>
+          <div>
+            <label for="fondoFiles">O subir imágenes de fondo (mínimo 4)</label>
+            <input type="file" id="fondoFiles" name="fondoFiles" accept="image/*" multiple>
+            <small>Puedes seleccionar varias imágenes (mínimo 4 para que se muestren en el fondo).</small>
+          </div>
+        </div>
+        </div>
         <div style="display: flex; gap: 18px; margin-top: 24px; justify-content: flex-end;">
         <button type="submit" class="btn" style="background:#3a86ff; color:#fff;">Guardar Cambios</button>
         <button type="button" class="btn" style="background:#f76c6c; color:#fff;" onclick="closeHomeInfoModal()">Cancelar</button>
@@ -437,5 +455,35 @@
       checkSidebar();
     });
   </script>
+  <script>
+        // Lógica para deshabilitar inputs según selección de fondo
+        document.addEventListener('DOMContentLoaded', function() {
+          const colorFondo = document.getElementById('colorFondo');
+          const fondoUrl = document.getElementById('fondoUrl');
+          const fondoFiles = document.getElementById('fondoFiles');
+
+          function updateFondoInputs() {
+            if (colorFondo.value && colorFondo.value !== '#ffffff') {
+              fondoUrl.disabled = true;
+              fondoFiles.disabled = true;
+            } else if (fondoUrl.value) {
+              colorFondo.disabled = true;
+              fondoFiles.disabled = true;
+            } else if (fondoFiles.files.length > 0) {
+              colorFondo.disabled = true;
+              fondoUrl.disabled = true;
+            } else {
+              colorFondo.disabled = false;
+              fondoUrl.disabled = false;
+              fondoFiles.disabled = false;
+            }
+          }
+
+          colorFondo.addEventListener('input', updateFondoInputs);
+          fondoUrl.addEventListener('input', updateFondoInputs);
+          fondoFiles.addEventListener('change', updateFondoInputs);
+          updateFondoInputs();
+        });
+        </script>
 </body>
 </html>

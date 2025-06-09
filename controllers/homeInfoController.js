@@ -5,15 +5,15 @@ const fs = require('fs');
 const axios = require('axios');
 const { cloudinary } = require('../middlewares/cloudinary');
 
-// Mostrar formulario de edición de información de inicio
+// Redirige a la vista principal de admin si se intenta acceder a /admin/homeinfo directamente
 exports.getHomeInfo = async (req, res) => {
   try {
     let homeInfo = await HomeInfo.findOne();
-    // Si no existe, no lo crees aquí, solo envía un objeto vacío para el formulario
     if (!homeInfo) {
       homeInfo = { nombreLocal: '', slogan: '', descripcion: '', telefono: '', direccion: '', email: '', logoUrl: '', iconUrl: '' };
     }
-    res.render('admin/homeinfo', { title: 'Editar Inicio', homeInfo });
+    // Renderiza la vista principal de admin (index.ejs) en vez de una vista inexistente
+    res.render('admin/index', { title: 'Editar Inicio', homeInfo });
   } catch (error) {
     console.error(error);
     res.status(500).send('Error al obtener la información de inicio');
@@ -23,11 +23,24 @@ exports.getHomeInfo = async (req, res) => {
 // Actualizar información de inicio
 exports.updateHomeInfo = async (req, res) => {
   try {
-    const { nombreLocal, slogan, descripcion, telefono, direccion, email, logoUrl, iconUrl, TituloServicio1, TituloServicio2 } = req.body;
+    const { nombreLocal, slogan, descripcion, telefono, direccion, email, logoUrl, iconUrl, TituloServicio1, TituloServicio2, colorFondo, fondoUrl } = req.body;
     let homeInfo = await HomeInfo.findOne();
     // Procesar archivos subidos o URLs
     let logoPath = logoUrl;
     let iconPath = iconUrl;
+    // Procesar imágenes de fondo subidas (fondoFiles)
+    let fondoFiles = [];
+    if (req.files && req.files['fondoFiles']) {
+      // Subir cada imagen a Cloudinary si no es ya una URL de Cloudinary
+      for (const file of req.files['fondoFiles']) {
+        if (file.path && !file.path.includes('cloudinary.com')) {
+          // Ya está en Cloudinary por multer-storage-cloudinary
+          fondoFiles.push(file.path);
+        } else if (file.url) {
+          fondoFiles.push(file.url);
+        }
+      }
+    }
 
     // Función para procesar imagen circular con fondo transparente
     async function processCircularImage(inputPath, outputPath, size = 160) {
@@ -76,7 +89,7 @@ exports.updateHomeInfo = async (req, res) => {
     }
 
     if (!homeInfo) {
-      homeInfo = new HomeInfo({ nombreLocal, slogan, descripcion, telefono, direccion, email, logoUrl: logoPath, iconUrl: iconPath, TituloServicio1, TituloServicio2 });
+      homeInfo = new HomeInfo({ nombreLocal, slogan, descripcion, telefono, direccion, email, logoUrl: logoPath, iconUrl: iconPath, TituloServicio1, TituloServicio2, colorFondo, fondoUrl, fondoFiles });
     } else {
       homeInfo.nombreLocal = nombreLocal;
       homeInfo.slogan = slogan;
@@ -88,6 +101,9 @@ exports.updateHomeInfo = async (req, res) => {
       homeInfo.iconUrl = iconPath;
       homeInfo.TituloServicio1 = TituloServicio1;
       homeInfo.TituloServicio2 = TituloServicio2;
+      homeInfo.colorFondo = colorFondo;
+      homeInfo.fondoUrl = fondoUrl;
+      if (fondoFiles && fondoFiles.length > 0) homeInfo.fondoFiles = fondoFiles;
     }
     await homeInfo.save();
     res.redirect('/admin/homeinfo');

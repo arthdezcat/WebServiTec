@@ -1,11 +1,11 @@
-const ComputadoraLaptop = require('../models/Galeria'); // Ahora es ComputadoraLaptop
+const ServiceSecundary = require('../models/Galeria'); // Antes ComputadoraLaptop
 const path = require('path');
 const { cloudinary } = require('../middlewares/cloudinary');
 
 // Obtener todas las ofertas
 exports.getGaleria = async (req, res) => {
   try {
-    const computadoras = await ComputadoraLaptop.find();
+    const computadoras = await ServiceSecundary.find();
     res.render('pages/galeri', { galeria: computadoras, homeInfo: res.locals.homeInfo });
   } catch (error) {
     console.error(error);
@@ -16,7 +16,7 @@ exports.getGaleria = async (req, res) => {
 // Obtener solo las imágenes de galería para el slider de ofertas en home
 exports.getGaleriaImages = async (req, res, next) => {
   try {
-    const galeriaImages = await ComputadoraLaptop.find({}, 'image title');
+    const galeriaImages = await ServiceSecundary.find({}, 'image title');
     res.locals.galeriaImages = galeriaImages;
     next();
   } catch (error) {
@@ -33,13 +33,20 @@ exports.addGaleria = async (req, res) => {
     if (req.file && req.file.path) {
       image = req.file.path; // URL de Cloudinary
     }
-    const { title, description, tipo, fechaInicio, fechaFin, porcentaje, especial } = req.body;
-    const newComputadora = new ComputadoraLaptop({ title, description, image, tipo, fechaInicio, fechaFin, porcentaje, especial });
+    const { title, description, price, garantia } = req.body;
+    // Solo se guardan los campos nuevos y los antiguos si existen
+    const newComputadora = new ServiceSecundary({
+      title,
+      description,
+      price: price || undefined,
+      garantia,
+      image
+    });
     await newComputadora.save();
     res.redirect('/admin/galeria');
   } catch (error) {
     console.error(error);
-    res.status(500).send('Error al agregar la oferta');
+    res.status(500).send('Error al agregar el registro');
   }
 };
 
@@ -48,8 +55,7 @@ exports.updateGaleria = async (req, res) => {
   try {
     const { id } = req.params;
     let image = req.body.image;
-    const galeria = await ComputadoraLaptop.findById(id);
-    // Si hay nueva imagen y la anterior era de Cloudinary, eliminar la anterior
+    const galeria = await ServiceSecundary.findById(id);
     if (req.file && req.file.path) {
       image = req.file.path;
       if (galeria && galeria.image && galeria.image.includes('cloudinary.com')) {
@@ -57,12 +63,18 @@ exports.updateGaleria = async (req, res) => {
         await cloudinary.uploader.destroy('webservitec/' + publicId);
       }
     }
-    const { title, description, tipo, fechaInicio, fechaFin, porcentaje, especial } = req.body;
-    await ComputadoraLaptop.findByIdAndUpdate(id, { title, description, image, tipo, fechaInicio, fechaFin, porcentaje, especial });
+    const { title, description, price, garantia } = req.body;
+    await ServiceSecundary.findByIdAndUpdate(id, {
+      title,
+      description,
+      price: price || undefined,
+      garantia,
+      image
+    });
     res.redirect('/admin/galeria');
   } catch (error) {
     console.error(error);
-    res.status(500).send('Error al actualizar la oferta');
+    res.status(500).send('Error al actualizar el registro');
   }
 };
 
@@ -70,12 +82,12 @@ exports.updateGaleria = async (req, res) => {
 exports.deleteGaleria = async (req, res) => {
   try {
     const { id } = req.params;
-    const galeria = await ComputadoraLaptop.findById(id);
+    const galeria = await ServiceSecundary.findById(id);
     if (galeria && galeria.image && galeria.image.includes('cloudinary.com')) {
       const publicId = galeria.image.split('/').slice(-1)[0].split('.')[0];
       await cloudinary.uploader.destroy('webservitec/' + publicId);
     }
-    await ComputadoraLaptop.findByIdAndDelete(id);
+    await ServiceSecundary.findByIdAndDelete(id);
     res.redirect('/admin/galeria');
   } catch (error) {
     console.error(error);

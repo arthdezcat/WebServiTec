@@ -125,7 +125,19 @@
     }
   </style>
 </head>
-<body>
+<body style="<% if (homeInfo && homeInfo.colorFondo) { %>background:<%= homeInfo.colorFondo %>;<% } else if (homeInfo && homeInfo.fondoUrl) { %>background-image:url('<%= homeInfo.fondoUrl %>');background-size:cover;background-position:center;<% } else if (homeInfo && homeInfo.fondoFiles && homeInfo.fondoFiles.length >= 4) { %>background-image:url('<%= homeInfo.fondoFiles[0] %>');background-size:cover;background-position:center;<% } %>;transition: background 1s;">
+  <% if (homeInfo && homeInfo.fondoFiles && homeInfo.fondoFiles.length >= 4) { %>
+  <script>
+    var fondoImgs = JSON.parse('<%= JSON.stringify(homeInfo.fondoFiles) %>');
+    var fondoIdx = 0;
+    setInterval(function() {
+      fondoIdx = (fondoIdx + 1) % fondoImgs.length;
+      document.body.style.backgroundImage = 'url(' + fondoImgs[fondoIdx] + ')';
+      document.body.style.backgroundSize = 'cover';
+      document.body.style.backgroundPosition = 'center';
+    }, 6000);
+  </script>
+  <% } %>
   <%- include('../partials/header') %>
   <section class="otros-section">
     <h2 class="otros-title"><%= homeInfo && homeInfo.TituloServicio2 ? homeInfo.TituloServicio2 : 'TituloServicio2' %></h2>
@@ -135,18 +147,11 @@
           <img src="<%= oferta.image %>" alt="<%= oferta.title %>" class="oferta-img card-img-modal" onclick="openImgModal(this)">
           <div class="nombre"><%= oferta.title %></div>
           <div class="descripcion"><%= oferta.description %></div>
-          <div class="descripcion">Tipo: <%= oferta.tipo %></div>
-          <% if (oferta.porcentaje) { %>
-            <div class="descripcion">Descuento: <%= oferta.porcentaje %>%</div>
+          <% if (oferta.price) { %>
+            <div class="precio">Precio: $<%= oferta.price %></div>
           <% } %>
-          <% if (oferta.especial) { %>
-            <div class="descripcion">Oferta Especial: <%= oferta.especial %></div>
-          <% } %>
-          <% if (oferta.fechaInicio) { %>
-            <div class="descripcion">Desde: <%= new Date(oferta.fechaInicio).toLocaleDateString() %></div>
-          <% } %>
-          <% if (oferta.fechaFin) { %>
-            <div class="descripcion">Hasta: <%= new Date(oferta.fechaFin).toLocaleDateString() %></div>
+          <% if (oferta.garantia) { %>
+            <div class="descripcion"><strong>Garantía:</strong> <%= oferta.garantia %></div>
           <% } %>
         </div>
       <% }); %>

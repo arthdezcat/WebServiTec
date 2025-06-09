@@ -8,6 +8,7 @@ const homeInfoPublic = require('../controllers/homeInfoPublic');
 const authMiddleware = require('../middlewares/authMiddleware');
 const upload = require('../middlewares/uploadImage');
 const userAdminController = require('../controllers/userAdminController');
+const multer = require('multer');
 
 // Proteger rutas del panel de administración
 router.use(authMiddleware.isAuthenticated, homeInfoPublic.getHomeInfoPublic);
@@ -43,7 +44,8 @@ router.post('/contact/update/:id', upload.single('iconFile'), contactController.
 router.get('/homeinfo', homeInfoController.getHomeInfo);
 router.post('/homeinfo', upload.fields([
   { name: 'logoFile', maxCount: 1 },
-  { name: 'iconFile', maxCount: 1 }
+  { name: 'iconFile', maxCount: 1 },
+  { name: 'fondoFiles', maxCount: 10 }
 ]), homeInfoController.updateHomeInfo);
 
 // Rutas para gestión de usuarios administradores

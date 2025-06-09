@@ -12,6 +12,8 @@
       background: #fff;
       margin: 0;
       font-family: 'Montserrat', Arial, sans-serif;
+      position: relative;
+      z-index: 1;
     }
     .hero {
       position: relative;
@@ -41,7 +43,7 @@
     .hero-content h1 {
       font-size: 3rem;
       font-weight: 800;
-      margin-bottom: 18px;
+      margin-bottom: 32px;
       letter-spacing: 1px;
       text-shadow: 0 2px 12px rgba(0,0,0,0.08);
       word-break: break-word;
@@ -303,9 +305,33 @@
       display: block;
       object-fit: cover;
     }
+
+    /* Estilo para asegurar que el footer esté encima de todo */
+    footer {
+      position: relative;
+      z-index: 10;
+    }
+
+    /* Estilo para aplicar el fondo de HomeInfo */
+    .hero-content, .slider-container {
+      position: relative;
+      z-index: 2;
+    }
   </style>
 </head>
-<body>
+<body style="<% if (homeInfo && homeInfo.colorFondo) { %>background:<%= homeInfo.colorFondo %>;<% } else if (homeInfo && homeInfo.fondoUrl) { %>background-image:url('<%= homeInfo.fondoUrl %>');background-size:cover;background-position:center;<% } else if (homeInfo && homeInfo.fondoFiles && homeInfo.fondoFiles.length >= 4) { %>background-image:url('<%= homeInfo.fondoFiles[0] %>');background-size:cover;background-position:center;<% } %>;transition: background 1s;">
+  <% if (homeInfo && homeInfo.fondoFiles && homeInfo.fondoFiles.length >= 4) { %>
+  <script>
+    var fondoImgs = JSON.parse('<%= JSON.stringify(homeInfo.fondoFiles) %>');
+    var fondoIdx = 0;
+    setInterval(function() {
+      fondoIdx = (fondoIdx + 1) % fondoImgs.length;
+      document.body.style.backgroundImage = 'url(' + fondoImgs[fondoIdx] + ')';
+      document.body.style.backgroundSize = 'cover';
+      document.body.style.backgroundPosition = 'center';
+    }, 6000);
+  </script>
+  <% } %>
   <%- include('../partials/header') %>
   <div class="hero">
     <div class="hero-overlay"></div>
