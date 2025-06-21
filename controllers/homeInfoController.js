@@ -28,16 +28,19 @@ exports.updateHomeInfo = async (req, res) => {
     // Procesar archivos subidos o URLs
     let logoPath = logoUrl;
     let iconPath = iconUrl;
+    // LOG para depuración de archivos subidos
+    console.log('Archivos recibidos fondoFiles:', req.files && req.files['fondoFiles']);
     // Procesar imágenes de fondo subidas (fondoFiles)
     let fondoFiles = [];
     if (req.files && req.files['fondoFiles']) {
-      // Subir cada imagen a Cloudinary si no es ya una URL de Cloudinary
       for (const file of req.files['fondoFiles']) {
-        if (file.path && !file.path.includes('cloudinary.com')) {
-          // Ya está en Cloudinary por multer-storage-cloudinary
+        // multer-storage-cloudinary guarda la URL en file.path
+        if (file.path && file.path.includes('cloudinary.com')) {
           fondoFiles.push(file.path);
         } else if (file.url) {
           fondoFiles.push(file.url);
+        } else {
+          console.log('Archivo de fondo sin URL Cloudinary:', file);
         }
       }
     }
@@ -86,6 +89,34 @@ exports.updateHomeInfo = async (req, res) => {
       const outputPath = path.join(__dirname, '../public/uploads', outputFile);
       await processCircularImage(logoInputPath, outputPath, 96);
       iconPath = '/uploads/' + outputFile;
+    }
+
+    // Validación para asegurar que solo una opción de fondo esté seleccionada
+    if ((colorFondo && fondoUrl) || (colorFondo && fondoFiles.length > 0) || (fondoUrl && fondoFiles.length > 0)) {
+      return res.status(400).send('Solo puede seleccionar una opción de fondo: color, URL o imagen.');
+    }
+
+    // Validación: si se suben imágenes de fondo, deben ser al menos 4
+    if (fondoFiles && fondoFiles.length > 0 && fondoFiles.length < 4) {
+      return res.status(400).send('Debe subir al menos 4 imágenes de fondo para que se muestren correctamente.');
+    }
+
+    // Si se selecciona colorFondo o fondoUrl, eliminar imágenes anteriores de fondoFiles en Cloudinary
+    if ((colorFondo || fondoUrl) && homeInfo && homeInfo.fondoFiles && homeInfo.fondoFiles.length > 0) {
+      for (const url of homeInfo.fondoFiles) {
+        if (url && url.includes('cloudinary.com')) {
+          try {
+            // Extraer public_id de la URL de Cloudinary
+            const parts = url.split('/');
+            const fileName = parts[parts.length - 1];
+            const publicId = 'webservitec/' + fileName.split('.')[0];
+            await cloudinary.uploader.destroy(publicId);
+          } catch (err) {
+            console.error('Error eliminando imagen de fondo en Cloudinary:', err);
+          }
+        }
+      }
+      homeInfo.fondoFiles = [];
     }
 
     if (!homeInfo) {

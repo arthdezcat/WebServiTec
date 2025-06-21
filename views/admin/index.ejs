@@ -393,15 +393,18 @@
           <div>
             <label for="colorFondo">Color de fondo</label>
             <input type="color" id="colorFondo" name="colorFondo" value="<%= homeInfo && homeInfo.colorFondo ? homeInfo.colorFondo : '#ffffff' %>">
+            <button type="button" id="cancelColorFondo" style="padding: 5px 10px; background-color: #f44336; color: white; border: none; border-radius: 5px; cursor: pointer;">Cancelar</button>
           </div>
           <div>
             <label for="fondoUrl">URL de imagen de fondo</label>
             <input type="text" id="fondoUrl" name="fondoUrl" value="<%= homeInfo && homeInfo.fondoUrl ? homeInfo.fondoUrl : '' %>" placeholder="http://...">
+            <button type="button" id="cancelFondoUrl" style="padding: 5px 10px; background-color: #f44336; color: white; border: none; border-radius: 5px; cursor: pointer;">Cancelar</button>
           </div>
           <div>
             <label for="fondoFiles">O subir imágenes de fondo (mínimo 4)</label>
             <input type="file" id="fondoFiles" name="fondoFiles" accept="image/*" multiple>
             <small>Puedes seleccionar varias imágenes (mínimo 4 para que se muestren en el fondo).</small>
+            <button type="button" id="cancelFondoFiles" style="padding: 5px 10px; background-color: #f44336; color: white; border: none; border-radius: 5px; cursor: pointer;">Cancelar</button>
           </div>
         </div>
         </div>
@@ -479,11 +482,46 @@
             }
           }
 
+          function resetBackgroundSelection() {
+            colorFondo.value = '#ffffff';
+            fondoUrl.value = '';
+            fondoFiles.value = '';
+            updateFondoInputs();
+          }
+
           colorFondo.addEventListener('input', updateFondoInputs);
           fondoUrl.addEventListener('input', updateFondoInputs);
           fondoFiles.addEventListener('change', updateFondoInputs);
+
+          document.getElementById('cancelBackgroundSelection').addEventListener('click', resetBackgroundSelection);
           updateFondoInputs();
         });
         </script>
+  <script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const colorFondo = document.getElementById('colorFondo');
+    const fondoUrl = document.getElementById('fondoUrl');
+    const fondoFiles = document.getElementById('fondoFiles');
+
+    document.getElementById('cancelColorFondo').addEventListener('click', function() {
+      colorFondo.value = '#ffffff';
+      colorFondo.disabled = false;
+      fondoUrl.disabled = false;
+      fondoFiles.disabled = false;
+    });
+
+    document.getElementById('cancelFondoUrl').addEventListener('click', function() {
+      fondoUrl.value = '';
+      colorFondo.disabled = false;
+      fondoFiles.disabled = false;
+    });
+
+    document.getElementById('cancelFondoFiles').addEventListener('click', function() {
+      fondoFiles.value = '';
+      colorFondo.disabled = false;
+      fondoUrl.disabled = false;
+    });
+  });
+  </script>
 </body>
 </html>
