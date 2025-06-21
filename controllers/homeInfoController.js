@@ -28,8 +28,6 @@ exports.updateHomeInfo = async (req, res) => {
     // Procesar archivos subidos o URLs
     let logoPath = logoUrl;
     let iconPath = iconUrl;
-    // LOG para depuración de archivos subidos
-    console.log('Archivos recibidos fondoFiles:', req.files && req.files['fondoFiles']);
     // Procesar imágenes de fondo subidas (fondoFiles)
     let fondoFiles = [];
     if (req.files && req.files['fondoFiles']) {
