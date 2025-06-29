@@ -190,22 +190,80 @@
       }
     }
     .table.contact-table {
-  width: 100%;
-  background: #fff;
-  border-radius: 10px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.07);
-  overflow: hidden;
-  margin-bottom: 40px;
-}
-.table.contact-table th, .table.contact-table td {
-  vertical-align: middle;
-  text-align: center;
-}
-.table.contact-table th {
-  background: #f5f5f5;
-  font-weight: 700;
-  color: #232946;
-}
+      width: 100%;
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+      overflow: hidden;
+      margin-bottom: 40px;
+      table-layout: fixed;
+    }
+    .table.contact-table th, .table.contact-table td {
+      vertical-align: middle;
+      text-align: center;
+      padding: 16px 12px;
+      word-wrap: break-word;
+      line-height: 1.5;
+    }
+    .table.contact-table th {
+      background: #f5f5f5;
+      font-weight: 700;
+      color: #232946;
+      font-size: 1.05rem;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      padding-top: 20px;
+      padding-bottom: 20px;
+    }
+    .table.contact-table td:first-child {
+      text-align: left;
+      padding-left: 20px;
+      font-weight: 500;
+    }
+    .table.contact-table th:first-child {
+      text-align: left;
+      padding-left: 20px;
+    }
+    
+    /* Efectos hover mejorados para filas */
+    .table.contact-table tr:hover {
+      background-color: #f8fafc;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      transition: all 0.3s ease;
+    }
+    
+    /* Mejores estilos para enlaces */
+    .table.contact-table a {
+      color: #4f46e5;
+      text-decoration: none;
+      font-weight: 500;
+      padding: 4px 8px;
+      border-radius: 4px;
+      transition: all 0.2s ease;
+    }
+    
+    .table.contact-table a:hover {
+      background: #e0e7ff;
+      color: #3730a3;
+    }
+    
+    /* Estilos para iconos por defecto */
+    .table.contact-table .default-icon {
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, #4f46e5, #7c3aed);
+      border-radius: 6px;
+      color: white;
+      transition: transform 0.2s ease;
+    }
+    
+    .table.contact-table .default-icon:hover {
+      transform: scale(1.1);
+    }
 .btn-sm { padding: 4px 16px; font-size: 15px; border-radius: 6px; font-weight: 600; }
 .btn-success { background: #27ae60; color: #fff; border: none; }
 .btn-primary { background: #2980b9; color: #fff; border: none; }
@@ -216,50 +274,776 @@
 .btn-danger:hover { background: #c0392b; }
 .btn-secondary:hover { background: #555; }
 .update-form-row td { padding: 0 !important; }
-.modal-custom {
-  display: none;
-  position: fixed;
-  z-index: 9999;
-  left: 0;
-  top: 0;
-  width: 100vw;
-  height: 100vh;
-  background: rgba(0,0,0,0.4);
-  justify-content: center;
-  align-items: center;
-}
-.modal-custom.active { display: flex; }
-.modal-content-custom {
-  background: #fff;
-  padding: 32px 24px;
-  border-radius: 16px;
-  box-shadow: 0 4px 24px rgba(0,0,0,0.18);
-  min-width: 320px;
-  max-width: 420px;
-  width: 95vw;
-  max-height: 90vh;
-  overflow-y: auto;
-  position: relative;
-  margin: 0 auto;
-  display: flex;
-  flex-direction: column;
-  align-items: stretch;
-}
-.close-modal {
-  position: absolute;
-  top: 12px;
-  right: 18px;
-  font-size: 2rem;
-  color: #888;
-  cursor: pointer;
-}
-@media (max-width: 600px) {
-  .modal-content-custom {
-    padding: 18px 6px;
-    min-width: 0;
-    max-width: 98vw;
-  }
-}
+/* Estilos modernos para los campos del formulario */
+    .form-group {
+      margin-bottom: 20px;
+      position: relative;
+    }
+    
+    .form-group label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 600;
+      color: #2c3e50;
+      font-size: 0.95rem;
+      transition: color 0.3s ease;
+    }
+    
+    .form-control {
+      width: 100%;
+      padding: 12px 16px;
+      border: 2px solid #e1e8ed;
+      border-radius: 12px;
+      font-size: 1rem;
+      background: #ffffff;
+      transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+      position: relative;
+      outline: none;
+      font-family: inherit;
+    }
+    
+    .form-control:focus {
+      border-color: #4f46e5;
+      box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1), 0 4px 12px rgba(0, 0, 0, 0.08);
+      transform: translateY(-1px);
+      background: #fefefe;
+    }
+    
+    .form-control:hover:not(:focus) {
+      border-color: #c7d2fe;
+      box-shadow: 0 3px 8px rgba(0, 0, 0, 0.04);
+    }
+    
+    /* Estilos para textarea */
+    textarea.form-control {
+      min-height: 100px;
+      resize: vertical;
+      line-height: 1.6;
+    }
+    
+    textarea.form-control:focus {
+      min-height: 120px;
+    }
+    
+    /* Estilos para inputs de archivo */
+    input[type="file"] {
+      padding: 10px 14px;
+      border: 2px dashed #d1d5db;
+      border-radius: 12px;
+      background: #f9fafb;
+      color: #374151;
+      font-size: 0.9rem;
+      transition: all 0.3s ease;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    input[type="file"]:hover {
+      border-color: #6366f1;
+      background: #f0f4ff;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(99, 102, 241, 0.1);
+    }
+    
+    input[type="file"]:focus {
+      outline: none;
+      border-color: #4f46e5;
+      box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+    }
+    
+    /* Estilos para input color */
+    input[type="color"] {
+      width: 80px;
+      height: 45px;
+      border: 2px solid #e1e8ed;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      background: none;
+      outline: none;
+    }
+    
+    input[type="color"]:hover {
+      border-color: #6366f1;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(99, 102, 241, 0.15);
+    }
+    
+    input[type="color"]:focus {
+      border-color: #4f46e5;
+      box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+    }
+    
+    /* Estilos para campos con placeholder mejorado */
+    .form-control::placeholder {
+      color: #9ca3af;
+      font-style: italic;
+      transition: opacity 0.3s ease;
+    }
+    
+    .form-control:focus::placeholder {
+      opacity: 0.6;
+      transform: translateY(-2px);
+    }
+    
+    /* Efecto de etiqueta flotante opcional */
+    .floating-label {
+      position: relative;
+    }
+    
+    .floating-label input.form-control {
+      padding-top: 20px;
+      padding-bottom: 8px;
+    }
+    
+    .floating-label label {
+      position: absolute;
+      left: 16px;
+      top: 16px;
+      color: #9ca3af;
+      font-size: 1rem;
+      font-weight: 400;
+      transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+      pointer-events: none;
+      z-index: 1;
+    }
+    
+    .floating-label input.form-control:focus + label,
+    .floating-label input.form-control:not(:placeholder-shown) + label {
+      top: 4px;
+      font-size: 0.75rem;
+      color: #4f46e5;
+      font-weight: 600;
+    }
+    
+    /* Animación de input válido */
+    .form-control:valid:not(:placeholder-shown) {
+      border-color: #10b981;
+      box-shadow: 0 2px 4px rgba(16, 185, 129, 0.1);
+    }
+    
+    .form-control:valid:not(:placeholder-shown) + .validation-icon::after {
+      content: "✓";
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #10b981;
+      font-weight: bold;
+    }
+    
+    /* Estilos para botones del formulario */
+    .btn {
+      padding: 12px 24px;
+      border: none;
+      border-radius: 12px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+    }
+    
+    .btn:active {
+      transform: translateY(0);
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+    
+    /* Botón primario */
+    .btn-primary {
+      background: linear-gradient(135deg, #4f46e5, #7c3aed);
+      color: white;
+    }
+    
+    .btn-primary:hover {
+      background: linear-gradient(135deg, #4338ca, #6d28d9);
+    }
+    
+    /* Botón secundario */
+    .btn-secondary {
+      background: linear-gradient(135deg, #6b7280, #4b5563);
+      color: white;
+    }
+    
+    .btn-secondary:hover {
+      background: linear-gradient(135deg, #4b5563, #374151);
+    }
+    
+    /* Botón de cancelar */
+    .btn-cancel {
+      background: linear-gradient(135deg, #ef4444, #dc2626);
+      color: white;
+    }
+    
+    .btn-cancel:hover {
+      background: linear-gradient(135deg, #dc2626, #b91c1c);
+    }
+    
+    /* Efecto de ondas en botones */
+    .btn::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 0;
+      height: 0;
+      background: rgba(255, 255, 255, 0.3);
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+      transition: width 0.6s, height 0.6s;
+    }
+    
+    .btn:active::before {
+      width: 300px;
+      height: 300px;
+    }
+    
+    /* Estilos para elementos small */
+    small {
+      display: block;
+      margin-top: 6px;
+      color: #6b7280;
+      font-size: 0.85rem;
+      line-height: 1.4;
+    }
+    
+    /* Indicadores de estado mejorados */
+    .form-success {
+      border-color: #10b981 !important;
+      background: #f0fdf4;
+    }
+    
+    .form-error {
+      border-color: #ef4444 !important;
+      background: #fef2f2;
+    }
+    
+    .form-warning {
+      border-color: #f59e0b !important;
+      background: #fffbeb;
+    }
+
+    /* Modal personalizado mejorado */
+    .modal-custom {
+      display: none;
+      position: fixed;
+      z-index: 9999;
+      left: 0;
+      top: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0,0,0,0.4);
+      justify-content: center;
+      align-items: center;
+    }
+    
+    .modal-custom.active { 
+      display: flex; 
+    }
+    
+    .modal-content-custom {
+      background: #fff;
+      padding: 32px 24px;
+      border-radius: 16px;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.18);
+      min-width: 320px;
+      max-width: 480px;
+      width: 95vw;
+      max-height: 90vh;
+      overflow-y: auto;
+      position: relative;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+      /* Mejor scroll personalizado */
+      scrollbar-width: thin;
+      scrollbar-color: #cbd5e1 #f1f5f9;
+    }
+    
+    .modal-content-custom::-webkit-scrollbar {
+      width: 8px;
+    }
+    
+    .modal-content-custom::-webkit-scrollbar-track {
+      background: #f1f5f9;
+      border-radius: 4px;
+    }
+    
+    .modal-content-custom::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 4px;
+    }
+    
+    .modal-content-custom::-webkit-scrollbar-thumb:hover {
+      background: #94a3b8;
+    }
+    
+    .close-modal {
+      position: absolute;
+      top: 12px;
+      right: 18px;
+      font-size: 2rem;
+      color: #888;
+      cursor: pointer;
+      transition: color 0.3s ease;
+    }
+    
+    .close-modal:hover {
+      color: #ef4444;
+    }
+    
+    /* Efectos de transición suaves en todos los inputs */
+    .form-control,
+    input[type="file"],
+    input[type="color"],
+    textarea.form-control {
+      transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    }
+    
+    /* Mejores colores para las etiquetas */
+    .form-group label {
+      color: #374151;
+      font-size: 0.95rem;
+      font-weight: 600;
+      letter-spacing: 0.025em;
+    }
+    
+    /* Estados de validación mejorados */
+    .form-control:valid:not(:placeholder-shown) {
+      border-color: #10b981;
+      background: linear-gradient(135deg, #ffffff 0%, #f0fdf4 100%);
+      box-shadow: 0 2px 4px rgba(16, 185, 129, 0.1), 0 0 0 3px rgba(16, 185, 129, 0.1);
+    }
+    
+    .form-control:invalid:not(:placeholder-shown) {
+      border-color: #ef4444;
+      background: linear-gradient(135deg, #ffffff 0%, #fef2f2 100%);
+      box-shadow: 0 2px 4px rgba(239, 68, 68, 0.1), 0 0 0 3px rgba(239, 68, 68, 0.1);
+    }
+    
+    /* Indicador visual para campos requeridos */
+    .form-group:has(input[required]) label::after,
+    .form-group:has(textarea[required]) label::after {
+      content: ' *';
+      color: #ef4444;
+      font-weight: bold;
+      margin-left: 2px;
+    }
+    
+    /* Mejores estilos para small/hints */
+    small i {
+      margin-right: 4px;
+      opacity: 0.7;
+    }
+    
+    /* Animación sutil en el hover de inputs */
+    .form-control:hover:not(:focus):not(:disabled) {
+      border-color: #c7d2fe;
+      box-shadow: 0 3px 8px rgba(0, 0, 0, 0.04);
+      transform: translateY(-1px);
+    }
+    
+    /* Mejor estilo para los títulos de sección */
+    h3 {
+      color: #1f2937;
+      font-weight: 700;
+      margin-bottom: 24px;
+      padding-bottom: 12px;
+      border-bottom: 2px solid #e5e7eb;
+      font-size: 1.4rem;
+    }
+    
+    /* Responsive para formularios */
+    @media (max-width: 768px) {
+      .form-control {
+        padding: 14px 16px;
+        font-size: 16px; /* Evita zoom en iOS */
+      }
+      
+      .btn {
+        padding: 14px 20px;
+        font-size: 1rem;
+        width: 100%;
+        margin-bottom: 10px;
+      }
+      
+      .modal-content-custom {
+        padding: 18px 12px;
+        min-width: 0;
+        max-width: 98vw;
+      }
+      
+      /* Estilos responsive para botones de acción en tablas móviles */
+    @media (max-width: 768px) {
+      /* Mejorar visibilidad de botones en móviles */
+      .table td {
+        vertical-align: middle;
+        padding: 6px 3px;
+        font-size: 13px;
+      }
+      
+      .table th {
+        font-size: 12px;
+        padding: 8px 3px;
+      }
+      
+      /* Botones de acción más compactos en móviles */
+      .btn-sm {
+        padding: 6px 8px !important;
+        font-size: 11px !important;
+        min-width: 32px;
+        height: 28px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        margin: 1px !important;
+        border-radius: 4px;
+      }
+      
+      /* Columna de acciones más compacta */
+      .table th:last-child,
+      .table td:last-child {
+        min-width: 70px !important;
+        width: 70px !important;
+        text-align: center !important;
+        padding: 4px 1px !important;
+      }
+      
+      /* Contenedor de botones en línea */
+      .delete-form-inline {
+        display: inline-block !important;
+        margin: 0 !important;
+        vertical-align: top;
+      }
+      
+      /* Iconos de botones más pequeños */
+      .btn-sm i {
+        font-size: 9px;
+      }
+      
+      /* Espaciado entre botones reducido */
+      .btn-edit-product,
+      .btn-edit-contact,
+      .btn-edit-offer,
+      .btn-edit-user {
+        margin-right: 2px !important;
+        margin-bottom: 1px !important;
+      }
+      
+      /* Botón eliminar */
+      .delete-icon-btn {
+        margin-left: 1px !important;
+        margin-bottom: 1px !important;
+      }
+      
+      /* Hover más sutil para móviles */
+      .btn-sm:hover {
+        transform: scale(1.02);
+        transition: transform 0.15s ease;
+      }
+      
+      /* Asegurar que los botones no se compriman */
+      .btn-sm {
+        flex-shrink: 0;
+        white-space: nowrap;
+      }
+    }
+    
+    @media (max-width: 480px) {
+      /* En pantallas muy pequeñas */
+      .table td {
+        font-size: 11px;
+        padding: 4px 2px;
+      }
+      
+      .table th {
+        font-size: 10px;
+        padding: 6px 2px;
+      }
+      
+      .btn-sm {
+        padding: 4px 6px !important;
+        font-size: 9px !important;
+        min-width: 26px;
+        height: 24px;
+        border-radius: 3px;
+      }
+      
+      .btn-sm i {
+        font-size: 8px;
+      }
+      
+      /* Columna de acciones muy compacta */
+      .table th:last-child,
+      .table td:last-child {
+        min-width: 60px !important;
+        width: 60px !important;
+        padding: 2px 1px !important;
+      }
+      
+      /* Botones en fila más compacta */
+      .table td:last-child {
+        display: flex;
+        flex-direction: row;
+        gap: 1px;
+        justify-content: center;
+        align-items: center;
+        flex-wrap: nowrap;
+      }
+      
+      .delete-form-inline {
+        margin: 0 !important;
+      }
+      
+      /* Botones apilados en pantallas muy pequeñas si es necesario */
+      .table td:last-child {
+        display: flex;
+        flex-direction: row;
+        gap: 2px;
+        justify-content: center;
+        align-items: center;
+        flex-wrap: wrap;
+      }
+      
+      .delete-form-inline {
+        margin: 0 !important;
+      }
+    }
+
+    /* Responsive design para la tabla de contactos */
+    .actions-column {
+      min-width: 90px;
+      width: 1%;
+      text-align: center;
+      white-space: nowrap;
+    }
+
+    /* Media queries responsive optimizadas */
+    @media (max-width: 768px) {
+      .hide-mobile {
+        display: none !important;
+      }
+      
+      .contact-table {
+        font-size: 0.9rem;
+        border-radius: 8px;
+      }
+      
+      .contact-table th,
+      .contact-table td {
+        padding: 12px 8px;
+        vertical-align: middle;
+      }
+      
+      /* Distribución para 3 columnas visibles: Nombre, Icono, Acciones */
+      .contact-table th:first-child,
+      .contact-table td:first-child {
+        padding-right: 12px !important;
+        width: 50%;
+        text-align: left;
+        padding-left: 16px !important;
+      }
+      
+      .contact-table th:nth-child(5),
+      .contact-table td:nth-child(5) {
+        width: 25%;
+        text-align: center;
+        padding: 8px 4px !important;
+      }
+      
+      .contact-table th:last-child,
+      .contact-table td:last-child {
+        padding-left: 8px !important;
+        width: 25%;
+        text-align: center;
+      }
+      
+      .actions-column {
+        min-width: 80px;
+      }
+      
+      .btn-sm {
+        padding: 8px 12px;
+        font-size: 0.85rem;
+        margin-right: 4px !important;
+        border-radius: 6px;
+      }
+      
+      .actions-column .btn {
+        min-width: 36px;
+        height: 36px;
+        padding: 8px;
+      }
+      
+      .delete-form-inline {
+        margin-left: 4px !important;
+        display: inline;
+      }
+      
+      /* Ajustar iconos para que se vean bien en móvil */
+      .contact-table .default-icon {
+        width: 28px;
+        height: 28px;
+        font-size: 14px;
+      }
+      
+      .contact-table img {
+        width: 28px !important;
+        height: 28px !important;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .contact-table {
+        font-size: 0.85rem;
+      }
+      
+      .contact-table th,
+      .contact-table td {
+        padding: 10px 4px;
+      }
+      
+      /* Distribución optimizada para pantallas muy pequeñas */
+      .contact-table th:first-child,
+      .contact-table td:first-child {
+        padding-right: 8px !important;
+        width: 45%;
+        padding-left: 8px !important;
+        font-size: 0.8rem;
+      }
+      
+      .contact-table th:nth-child(5),
+      .contact-table td:nth-child(5) {
+        width: 25%;
+        text-align: center;
+        padding: 6px 2px !important;
+      }
+      
+      .contact-table th:last-child,
+      .contact-table td:last-child {
+        padding-left: 4px !important;
+        width: 30%;
+      }
+      
+      .actions-column {
+        min-width: 70px;
+      }
+      
+      .btn-sm {
+        padding: 6px 8px;
+        font-size: 0.75rem;
+        margin-right: 2px !important;
+      }
+      
+      .actions-column .btn {
+        min-width: 28px;
+        height: 28px;
+        padding: 4px;
+      }
+      
+      .actions-column .btn i {
+        font-size: 0.7rem;
+      }
+      
+      /* Iconos más pequeños para pantallas muy pequeñas */
+      .contact-table .default-icon {
+        width: 24px;
+        height: 24px;
+        font-size: 12px;
+      }
+      
+      .contact-table img {
+        width: 24px !important;
+        height: 24px !important;
+      }
+      
+      /* Encabezados más compactos */
+      .contact-table th {
+        font-size: 0.8rem;
+        padding: 8px 4px;
+      }
+    }
+    
+    /* Mejoras para desktop */
+    @media (min-width: 769px) {
+      .contact-table th,
+      .contact-table td {
+        padding: 18px 16px;
+      }
+      
+      .contact-table th:first-child,
+      .contact-table td:first-child {
+        width: 20%;
+        padding-right: 24px;
+        padding-left: 24px;
+      }
+      
+      .contact-table th:nth-child(2),
+      .contact-table td:nth-child(2) {
+        width: 25%;
+      }
+      
+      .contact-table th:nth-child(3),
+      .contact-table td:nth-child(3) {
+        width: 15%;
+      }
+      
+      .contact-table th:nth-child(4),
+      .contact-table td:nth-child(4) {
+        width: 15%;
+      }
+      
+      .contact-table th:nth-child(5),
+      .contact-table td:nth-child(5) {
+        width: 10%;
+        text-align: center;
+      }
+      
+      .contact-table th:last-child,
+      .contact-table td:last-child {
+        width: 15%;
+        text-align: center;
+      }
+      
+      .btn-sm {
+        padding: 8px 16px;
+        font-size: 0.9rem;
+        margin-right: 6px;
+      }
+      
+      .actions-column .btn {
+        min-width: 40px;
+        height: 40px;
+        padding: 10px;
+      }
+      
+      /* Iconos en tamaño completo para desktop */
+      .contact-table .default-icon {
+        width: 32px;
+        height: 32px;
+        font-size: 16px;
+      }
+      
+      .contact-table img {
+        width: 32px !important;
+        height: 32px !important;
+      }
+    }
   </style>
 </head>
 <body class="admin-page">
@@ -370,20 +1154,20 @@
     <thead>
       <tr>
         <th>Nombre</th>
-        <th>Email</th>
-        <th>Teléfono</th>
-        <th>Facebook</th>
+        <th class="hide-mobile">Email</th>
+        <th class="hide-mobile">Teléfono</th>
+        <th class="hide-mobile">Facebook</th>
         <th>Icono</th>
-        <th style="min-width:70px;width:1%;text-align:center;">Acciones</th>
+        <th class="actions-column">Acciones</th>
       </tr>
     </thead>
     <tbody>
       <% contact.forEach(contact => { %>
         <tr>
           <td><%= contact.name %></td>
-          <td><%= contact.email %></td>
-          <td><%= contact.telefono %></td>
-          <td>
+          <td class="hide-mobile"><%= contact.email %></td>
+          <td class="hide-mobile"><%= contact.telefono %></td>
+          <td class="hide-mobile">
             <% if (contact.facebookUrl) { %>
               <a href="<%= contact.facebookUrl %>" target="_blank">Ver</a>
             <% } %>
@@ -392,10 +1176,12 @@
             <% if (contact.iconUrl) { %>
               <img src="<%= contact.iconUrl %>" alt="icono" style="width:32px;height:32px;object-fit:cover;border-radius:6px;">
             <% } else { %>
-              <img src="/img/contactos.png" alt="icono" style="width:32px;height:32px;object-fit:cover;border-radius:6px;">
+              <div class="default-icon">
+                <i class="fas fa-address-book" style="font-size:16px;"></i>
+              </div>
             <% } %>
           </td>
-          <td>
+          <td class="actions-column">
             <button class="btn btn-primary btn-sm btn-edit-contact" data-contact='<%= JSON.stringify(contact) %>' style="margin-right:4px;"><i class="fas fa-edit"></i></button>
             <form action="/admin/contact/delete/<%= contact._id %>" method="post" style="display:inline;" class="delete-form-inline" onsubmit="return confirmDelete(event)">
               <button type="submit" class="btn btn-danger btn-sm delete-icon-btn" title="Eliminar"><i class="fas fa-trash-alt"></i></button>

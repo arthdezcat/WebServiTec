@@ -45,7 +45,11 @@ router.get('/homeinfo', homeInfoController.getHomeInfo);
 router.post('/homeinfo', upload.fields([
   { name: 'logoFile', maxCount: 1 },
   { name: 'iconFile', maxCount: 1 },
-  { name: 'fondoFiles', maxCount: 10 }
+  { name: 'fondoFile', maxCount: 1 },
+  { name: 'fondoInicio', maxCount: 1 },
+  { name: 'fondoServicios', maxCount: 1 },
+  { name: 'fondoGaleria', maxCount: 1 },
+  { name: 'fondoContacto', maxCount: 1 }
 ]), homeInfoController.updateHomeInfo);
 
 // Rutas para gestión de usuarios administradores
