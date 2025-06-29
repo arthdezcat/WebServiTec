@@ -662,19 +662,78 @@
       border: 3px solid rgba(255,255,255,0.7) !important;
       box-shadow: 0 5px 15px rgba(0,0,0,0.2) !important;
     }
+
+    /* Mejoras para slider de fondo */
+    body.has-bg-slider .logo-background {
+      z-index: -1; /* Por encima del slider de fondo que tiene z-index -2 */
+    }
+    
+    /* Estilos para el slider de fondo */
+    #bg-slider div {
+      transition: opacity 2.5s ease-in-out !important; /* Forzar transición suave */
+    }
+    
+    /* Estilos mejorados para el slider de fondo */
+    body.has-bg-slider::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.1); /* Ligero oscurecimiento para mejor contraste */
+      z-index: -1;
+      pointer-events: none;
+    }
+    
+    /* Mejorar visualmente el contenido sobre el slider */
+    body.background-slider-active .logo-background {
+      z-index: -1 !important; /* Asegurar que el logo esté siempre por encima del slider */
+      opacity: 0.12 !important; /* Reducir la opacidad para no interferir con el slider */
+    }
   </style>
 </head>
-<body style="<% if (homeInfo && homeInfo.colorFondo) { %>background:<%= homeInfo.colorFondo %>;<% } else if (homeInfo && homeInfo.fondoUrl) { %>background-image:url('<%= homeInfo.fondoUrl %>');background-size:cover;background-position:center;<% } else if (homeInfo && homeInfo.fondoFiles && homeInfo.fondoFiles.length >= 4) { %>background-image:url('<%= homeInfo.fondoFiles[0] %>');background-size:cover;background-position:center;<% } %>;transition: background 1s;">
-  <% if (homeInfo && homeInfo.fondoFiles && homeInfo.fondoFiles.length >= 4) { %>
+<body style="<% if (homeInfo && homeInfo.colorFondo) { %>background:<%= homeInfo.colorFondo %>;<% } else if (homeInfo && homeInfo.fondoUrl) { %>background-image:url('<%= homeInfo.fondoUrl %>');background-size:cover;background-position:center;<% } else if (homeInfo && homeInfo.fondoFileUrl) { %>background-image:url('<%= homeInfo.fondoFileUrl %>');background-size:cover;background-position:center;<% } else if (homeInfo && homeInfo.fondoInicio) { %>background-image:url('<%= homeInfo.fondoInicio %>');background-size:cover;background-position:center;<% } %>;transition: background 3s ease-in-out;">
+  <!-- Estilos adicionales para mejorar la visibilidad del slider -->
+  <style>
+    /* Estilos mejorados para el slider de fondo */
+    body.has-bg-slider::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.1); /* Ligero oscurecimiento para mejor contraste */
+      z-index: -1;
+      pointer-events: none;
+    }
+    
+    /* Mejorar visualmente el contenido sobre el slider */
+    body.background-slider-active .logo-background {
+      z-index: -1 !important; /* Asegurar que el logo esté siempre por encima del slider */
+      opacity: 0.12 !important; /* Reducir la opacidad para no interferir con el slider */
+    }
+  </style>
+  
+  <!-- Script común para el slider de fondo (ya no necesario para fondos específicos) -->
+  
+  <!-- Para imagen de fondo específica del inicio, asegurar que se cargue correctamente -->
+  <% if (homeInfo && homeInfo.fondoInicio) { %>
   <script>
-    var fondoImgs = JSON.parse('<%= JSON.stringify(homeInfo.fondoFiles) %>');
-    var fondoIdx = 0;
-    setInterval(function() {
-      fondoIdx = (fondoIdx + 1) % fondoImgs.length;
-      document.body.style.backgroundImage = 'url(' + fondoImgs[fondoIdx] + ')';
+    window.addEventListener('load', function() {
+      document.body.style.backgroundImage = 'url(<%= homeInfo.fondoInicio %>)';
       document.body.style.backgroundSize = 'cover';
       document.body.style.backgroundPosition = 'center';
-    }, 6000);
+    });
+  </script>
+  <% } else if (homeInfo && homeInfo.fondoFileUrl) { %>
+  <script>
+    window.addEventListener('load', function() {
+      document.body.style.backgroundImage = 'url(<%= homeInfo.fondoFileUrl %>)';
+      document.body.style.backgroundSize = 'cover';
+      document.body.style.backgroundPosition = 'center';
+    });
   </script>
   <% } %>
   <%- include('../partials/header') %>
