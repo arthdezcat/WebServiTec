@@ -27,23 +27,23 @@
 
 /* Colores del separador para fondo claro */
 .adaptive-footer.light-bg .separator-path-1 {
-  fill: #0080c7;
+  fill: #02a6ff;
   fill-opacity: 0.2;
 }
 
 .adaptive-footer.light-bg .separator-path-2 {
-  fill: #00a693;
+  fill: #00c9b1;
   fill-opacity: 0.15;
 }
 
 /* Colores del separador para fondo oscuro */
 .adaptive-footer.dark-bg .separator-path-1 {
-  fill: #50b0ff;
+  fill: #67b7f8;
   fill-opacity: 0.2;
 }
 
 .adaptive-footer.dark-bg .separator-path-2 {
-  fill: #4afc8d;
+  fill: #5bfc99;
   fill-opacity: 0.15;
 }
 
@@ -138,13 +138,13 @@
 
 /* Iconos en fondo claro */
 .adaptive-footer.light-bg .social-icon.email {
-  color: #0080c7;
-  border-color: rgba(0, 128, 199, 0.4);
+  color: #aa4242;
+  border-color: rgba(148, 44, 44, 0.4);
 }
 
 .adaptive-footer.light-bg .social-icon.facebook {
-  color: #3b5998;
-  border-color: rgba(59, 89, 152, 0.4);
+  color: #1624e9;
+  border-color: rgba(38, 50, 214, 0.4);
 }
 
 .adaptive-footer.light-bg .social-icon.whatsapp {
@@ -195,12 +195,12 @@
 
 /* Líneas en fondo claro */
 .adaptive-footer.light-bg .copyright-line {
-  background: linear-gradient(to right, transparent, rgba(0, 166, 147, 0.6), rgba(0, 128, 199, 0.6), transparent);
+  background: linear-gradient(to right, transparent, rgba(0, 126, 111, 0.6), rgba(0, 88, 136, 0.6), transparent);
 }
 
 /* Líneas en fondo oscuro */
 .adaptive-footer.dark-bg .copyright-line {
-  background: linear-gradient(to right, transparent, rgba(0, 255, 224, 0.6), rgba(80, 176, 255, 0.6), transparent);
+  background: linear-gradient(to right, transparent, rgba(0, 255, 225, 0.6), rgba(205, 228, 247, 0.6), transparent);
 }
 
 .copyright {
@@ -213,12 +213,12 @@
 
 /* Copyright en fondo claro */
 .adaptive-footer.light-bg .copyright {
-  color: #444;
+  color: #000000;
 }
 
 /* Copyright en fondo oscuro */
 .adaptive-footer.dark-bg .copyright {
-  color: #ddd;
+  color: #ffffff;
 }
 
 /* Efecto de brillo en el hover */

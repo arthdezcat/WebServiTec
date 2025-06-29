@@ -1,7 +1,7 @@
-<header>
-    <nav class="navbar" style="background:#fff;box-shadow:0 2px 8px rgba(0,0,0,0.04);padding:0;">
+<header id="dynamic-header" class="header-light" style="--header-text:#222; --header-border:#444; --header-text-light:#fff; --header-border-light:#f1f1f1; --header-text-dark:#222; --header-border-dark:#444;">
+    <nav class="navbar" style="background:transparent;box-shadow:none;padding:0;">
         <div class="logo">
-            <a href="/" style="font-size:22px;font-weight:900;color:#222;letter-spacing:1px;text-decoration:none;display:flex;align-items:center;gap:8px;">
+            <a href="/" style="font-size:22px;font-weight:900;letter-spacing:1px;text-decoration:none;display:flex;align-items:center;gap:8px;">
                 <img src="<%= homeInfo && homeInfo.logoUrl ? homeInfo.logoUrl : ' ' %>" alt="Logo" style="height:40px;width:40px;border-radius:50%;object-fit:cover;box-shadow:0 2px 8px rgba(0,0,0,0.12);background:#fff;padding:2px;cursor:pointer;" onclick="openLogoModal(event, this)" id="header-logo">
                 <%= typeof homeInfo !== 'undefined' && homeInfo && homeInfo.nombreLocal ? homeInfo.nombreLocal : "Nombre" %>
             </a>
@@ -26,15 +26,21 @@
     </div>
 
     <style>
-    /* Estilos para el header */
+    /* Header transparente y sticky */
     header {
-        background-color: #fff;
+        background-color: transparent !important;
         padding: 10px 10px;
-        position: relative;
+        position: sticky;
+        top: 0;
         z-index: 1000;
+        box-shadow: none;
+        transition: all 0.3s ease;
     }
 
+    /* Navbar sin fondo ni sombra */
     .navbar {
+        background: transparent !important;
+        box-shadow: none !important;
         display: flex;
         justify-content: space-between;
         align-items: center;
@@ -43,23 +49,57 @@
         width: 100%;
     }
 
+    /* Logo link con borde circular - Modo adaptativo */
     .logo a {
-        color: #222;
         text-decoration: none;
         font-size: 24px;
         font-weight: bold;
         display: flex;
         align-items: center;
+        border-radius: 50px;
+        padding: 6px 18px;
+        background: transparent !important;
+        transition: all 0.3s ease;
     }
 
+    /* Estilos para el header en modo claro (fondo oscuro) */
+    .header-light .logo a {
+        color: var(--header-text-light);
+        border: 2px solid var(--header-border-light);
+    }
+
+    .header-light .logo a:hover {
+        border-color: rgba(255, 255, 255, 0.7);
+    }
+
+    /* Estilos para el header en modo oscuro (fondo claro) */
+    .header-dark .logo a {
+        color: var(--header-text-dark);
+        border: 2px solid var(--header-border-dark);
+    }
+    
+    .header-dark .logo a:hover {
+        border-color: #888;
+    }
+
+    /* Menú hamburguesa - Modo adaptativo */
     .menu-toggle {
         display: none;
         cursor: pointer;
-        color: #222;
         font-size: 28px;
         margin-left: 16px;
+        transition: color 0.3s ease;
+    }
+    
+    .header-light .menu-toggle {
+        color: var(--header-text-light);
+    }
+    
+    .header-dark .menu-toggle {
+        color: var(--header-text-dark);
     }
 
+    /* Nav-list transparente */
     .nav-list {
         list-style: none;
         display: flex;
@@ -67,27 +107,49 @@
         margin: 0;
         padding: 0;
         align-items: center;
+        background: transparent !important;
+        box-shadow: none !important;
     }
 
+    /* Links principales con borde circular - Modo adaptativo */
     .nav-list li a {
-        color: #222;
         text-decoration: none;
         font-size: 17px;
         font-weight: 600;
         padding: 8px 18px;
-        border-radius: 22px;
-        transition: background 0.2s, color 0.2s;
+        border-radius: 50px;
+        background: transparent !important;
+        transition: all 0.3s ease;
         display: flex;
         align-items: center;
         gap: 6px;
     }
 
-    .nav-list li a:hover {
-        background: #f5f5f5;
-        color: #b48e5c !important;
+    /* Estilos para nav-list en modo claro (fondo oscuro) */
+    .header-light .nav-list li a {
+        color: var(--header-text-light);
+        border: 2px solid var(--header-border-light);
     }
 
-    /* Estilos para el modal del logo */
+    .header-light .nav-list li a:hover {
+        border-color: rgba(255, 255, 255, 0.7);
+        color: rgba(255, 255, 255, 0.9) !important;
+        background: rgba(255, 255, 255, 0.1);
+    }
+
+    /* Estilos para nav-list en modo oscuro (fondo claro) */
+    .header-dark .nav-list li a {
+        color: var(--header-text-dark);
+        border: 2px solid var(--header-border-dark);
+    }
+
+    .header-dark .nav-list li a:hover {
+        border-color: #888;
+        color: #b48e5c !important;
+        background: rgba(245, 245, 245, 0.1);
+    }
+
+    /* Modal del logo igual que antes */
     .logo-modal {
         display: none;
         position: fixed;
@@ -157,8 +219,16 @@
             opacity: 1;
         }
     }
+    
+    /* Estilo para detectores de fondo (invisibles para el usuario) */
+    .bg-detector {
+        visibility: hidden;
+        position: absolute;
+        z-index: -1;
+        pointer-events: none;
+    }
 
-    /* Estilos para dispositivos móviles */
+    /* Responsive */
     @media (max-width: 900px) {
       .navbar {
         flex-direction: column;
@@ -179,13 +249,13 @@
         .nav-list {
             display: none;
             flex-direction: column;
-            background-color: #fff;
+            background: transparent !important;
             position: absolute;
             top: 100%;
             left: 0;
             width: 100%;
             padding: 10px 0;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+            box-shadow: none !important;
         }
 
         .nav-list.active {
@@ -214,16 +284,133 @@
     document.addEventListener('DOMContentLoaded', function() {
         const mobileMenu = document.getElementById('mobile-menu');
         const navList = document.querySelector('.nav-list');
+        const header = document.getElementById('dynamic-header');
+        
+        // Menú móvil
         mobileMenu.addEventListener('click', () => {
             navList.classList.toggle('active');
         });
+        
         // Cierra el menú al hacer clic en un enlace (en móvil)
         navList.querySelectorAll('a').forEach(link => {
-          link.addEventListener('click', () => {
-            if(window.innerWidth <= 768) navList.classList.remove('active');
-          });
+            link.addEventListener('click', () => {
+                if(window.innerWidth <= 768) navList.classList.remove('active');
+            });
         });
+
+        // Crear elementos para detectar el color de fondo
+        createBackgroundDetectors();
+        
+        // Configurar la detección inicial
+        setTimeout(checkBackgroundColor, 100);
+        
+        // Configurar la detección continua mientras se hace scroll
+        window.addEventListener('scroll', debounce(checkBackgroundColor, 100));
+        window.addEventListener('resize', debounce(checkBackgroundColor, 100));
     });
+    
+    // Función para crear detectores de fondo
+    function createBackgroundDetectors() {
+        const header = document.getElementById('dynamic-header');
+        const headerRect = header.getBoundingClientRect();
+        const headerHeight = headerRect.height;
+        
+        // Crear elementos invisibles para detectar color
+        const detectors = [];
+        const numDetectors = 5; // Número de puntos de detección
+        
+        for (let i = 0; i < numDetectors; i++) {
+            const detector = document.createElement('div');
+            detector.className = 'bg-detector';
+            detector.style.cssText = `
+                position: absolute;
+                top: ${headerHeight / 2}px;
+                left: ${(i / (numDetectors - 1)) * 100}%;
+                width: 1px;
+                height: 1px;
+                pointer-events: none;
+                opacity: 0;
+            `;
+            detector.id = `bg-detector-${i}`;
+            header.appendChild(detector);
+            detectors.push(detector);
+        }
+    }
+    
+    // Función para verificar el color de fondo y ajustar el header
+    function checkBackgroundColor() {
+        const header = document.getElementById('dynamic-header');
+        const detectors = document.querySelectorAll('.bg-detector');
+        let isDarkBackground = false;
+        let detectedColors = [];
+        
+        detectors.forEach(detector => {
+            const backgroundColor = getBackgroundColor(detector);
+            detectedColors.push(backgroundColor);
+            
+            // Verificar si el color es oscuro
+            if (isColorDark(backgroundColor)) {
+                isDarkBackground = true;
+            }
+        });
+        
+        // Si la mayoría de los detectores están sobre un fondo oscuro
+        const darkCount = detectedColors.filter(color => isColorDark(color)).length;
+        if (darkCount > detectors.length / 2) {
+            header.classList.remove('header-dark');
+            header.classList.add('header-light');
+        } else {
+            header.classList.remove('header-light');
+            header.classList.add('header-dark');
+        }
+    }
+    
+    // Función para obtener el color de fondo de un elemento
+    function getBackgroundColor(element) {
+        const style = window.getComputedStyle(element);
+        const bgColor = style.backgroundColor;
+        
+        // Si es transparente, buscar en el elemento padre
+        if (bgColor === 'rgba(0, 0, 0, 0)' || bgColor === 'transparent') {
+            const parent = element.parentElement;
+            if (parent) {
+                return getBackgroundColor(parent);
+            }
+            return 'rgb(255, 255, 255)'; // Valor predeterminado
+        }
+        
+        return bgColor;
+    }
+    
+    // Función para determinar si un color es oscuro
+    function isColorDark(color) {
+        // Extraer valores RGB
+        const match = color.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)(?:,\s*[\d.]+)?\)/);
+        if (!match) return false;
+        
+        const r = parseInt(match[1]);
+        const g = parseInt(match[2]);
+        const b = parseInt(match[3]);
+        
+        // Calcular brillo perceptivo
+        // https://www.w3.org/TR/AERT/#color-contrast
+        const brightness = (r * 299 + g * 587 + b * 114) / 1000;
+        
+        // Se considera oscuro si el brillo es menor a 128
+        return brightness < 128;
+    }
+    
+    // Función debounce para optimizar el rendimiento
+    function debounce(func, wait) {
+        let timeout;
+        return function() {
+            const context = this, args = arguments;
+            clearTimeout(timeout);
+            timeout = setTimeout(() => {
+                func.apply(context, args);
+            }, wait);
+        };
+    }
 
     // Funciones para manejar el modal del logo
     function openLogoModal(event, logoImg) {

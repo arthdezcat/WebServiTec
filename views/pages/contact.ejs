@@ -33,12 +33,25 @@
       gap: 32px;
     }
 
+    /* Estilo especial para cuando hay un solo contacto */
+    .contacts-container.single-contact {
+      grid-template-columns: minmax(260px, 500px);
+      justify-content: center;
+    }
+
     .card-producto {
       background: #fff;
       border-radius: 12px;
       box-shadow: 0 2px 12px rgba(0,0,0,0.1);
       padding: 16px;
       text-align: center;
+    }
+
+    /* Ajustes para tarjeta única */
+    .single-contact .card-producto {
+      width: auto;
+      max-width: 500px;
+      margin: 0 auto;
     }
 
     .card-producto img {
@@ -83,7 +96,7 @@
     }
 
     .contact-links a {
-      color: #b48e5c;
+      color: #1a1816;
       font-size: 1.4rem;
       transition: color 0.2s;
     }
@@ -114,7 +127,7 @@
     }
 
     .sidebar-social a:hover {
-      color: #b48e5c;
+      color: #1f1e1d;
     }
 
     /* Logo y fondo semi-transparente para el contenido */
@@ -189,6 +202,7 @@
       display: block;
       object-fit: cover;
     }
+
   </style>
 </head>
 <body style="<% if (homeInfo && homeInfo.colorFondo) { %>background:<%= homeInfo.colorFondo %>;<% } else if (homeInfo && homeInfo.fondoUrl) { %>background-image:url('<%= homeInfo.fondoUrl %>');background-size:cover;background-position:center;<% } else if (homeInfo && homeInfo.fondoFiles && homeInfo.fondoFiles.length >= 4) { %>background-image:url('<%= homeInfo.fondoFiles[0] %>');background-size:cover;background-position:center;<% } %>;transition: background 1s;">
@@ -210,7 +224,7 @@
   <% } %>
   <section class="contact-section">
     <h2 class="contact-title">Contactos</h2>
-    <div class="contacts-container">
+    <div class="contacts-container <%= contact.length === 1 ? 'single-contact' : '' %>">
       <% contact.forEach(contact => { %>
       <div class="card-producto">
         <% if (contact.iconFile) { %>
@@ -254,13 +268,19 @@
         </div>
         <div class="contact-links">
         <% if (contact.emailUrl) { %>
-          <a href="<%= contact.emailUrl %>" title="Enviar correo"><i class="fas fa-envelope"></i></a>
+          <a href="<%= contact.emailUrl %>" class="social-icon email" title="Email">
+            <i class="fas fa-envelope"></i>
+          </a>
         <% } %>
         <% if (contact.facebookUrl) { %>
-          <a href="<%= contact.facebookUrl %>" target="_blank" title="Facebook"><i class="fab fa-facebook"></i></a>
+          <a href="<%= contact.facebookUrl %>" target="_blank" class="social-icon facebook" title="Facebook">
+            <i class="fab fa-facebook-f"></i>
+          </a>
         <% } %>
         <% if (contact.whatsappUrl) { %>
-          <a href="<%= contact.whatsappUrl %>" target="_blank" title="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+          <a href="<%= contact.whatsappUrl %>" target="_blank" class="social-icon whatsapp" title="WhatsApp">
+            <i class="fab fa-whatsapp"></i>
+          </a>
         <% } %>
         </div>
       </div>
