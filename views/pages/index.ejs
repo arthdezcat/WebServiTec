@@ -108,14 +108,15 @@
     }
     .slider-container {
       position: relative;
-      max-width: 900px;
+      max-width: 1200px; /* Aumentado aún más el ancho máximo del contenedor */
       margin: 0 auto 32px auto;
-      background: #fff;
+      background: transparent; /* Fondo transparente */
       border-radius: 0;
       box-shadow: none;
       overflow: hidden; /* Ocultar desbordamiento */
       padding: 0;
       width: 100%;
+      border: none; /* Sin bordes */
     }
     .slider {
       display: flex;
@@ -123,23 +124,23 @@
       align-items: center;
       position: relative;
       width: 100%;
-      min-height: 220px;
+      min-height: 360px; /* Altura mínima aumentada considerablemente para acomodar imágenes más grandes */
       overflow: hidden; /* Ocultar desbordamiento */
-      background: #fff;
+      background: transparent; /* Fondo transparente */
       gap: 0;
     }
     .slide {
       display: none;
-      width: 260px;
-      min-width: 260px;
-      max-width: 260px;
-      transition: opacity 0.5s, filter 0.5s, transform 0.5s, z-index 0.5s;
+      width: 100%;
+      max-width: 100%;
+      min-width: 100%;
+      transition: opacity 0.5s ease-in-out;
       position: absolute;
-      left: 50%;
+      left: 0;
       top: 0;
-      transform: translateX(-50%) scale(0.92);
+      right: 0;
+      bottom: 0;
       opacity: 0;
-      filter: blur(8px) grayscale(0.2);
       z-index: 1;
       box-sizing: border-box;
       display: flex;
@@ -153,45 +154,57 @@
       align-items: center;
       justify-content: center;
       opacity: 1;
-      filter: none;
       z-index: 3;
-      transform: translateX(-50%) scale(1.08);
+      position: relative;
+      left: auto;
+      right: auto;
+      transform: none;
     }
-    .slide.next {
-      display: flex;
-      opacity: 0.7;
-      filter: blur(6px) grayscale(0.3);
-      z-index: 2;
-      transform: translateX(80%) scale(0.96);
-    }
-    .slide.prev {
-      display: flex;
-      opacity: 0.7;
-      filter: blur(6px) grayscale(0.3);
-      z-index: 2;
-      transform: translateX(-180%) scale(0.96);
+    .slide.next, .slide.prev {
+      display: none !important;
+      opacity: 0 !important;
+      visibility: hidden !important;
     }
     .slide img {
       width: 100%;
-      height: auto; /* Cambiamos a auto para mantener la proporción */
-      max-height: 180px; /* Altura máxima en escritorio */
-      object-fit: contain; /* Cambiamos a contain para que se vea la imagen completa */
+      height: auto; /* Mantener proporción */
+      max-height: 320px; /* Altura máxima significativamente aumentada en escritorio */
+      object-fit: contain; /* Mantener imagen completa */
       border-radius: 8px;
       box-shadow: none;
-      margin-bottom: 10px;
-      background: linear-gradient(135deg, #00a693, #0080c7); /* Fondo verde-azul */
+      margin: 0 auto; /* Centrar imagen */
+      background: transparent; /* Fondo transparente */
       max-width: 100%;
       display: block;
-      border: 2px solid rgba(0, 166, 147, 0.3);
+      border: none; /* Sin bordes */
     }
     .slide-title {
-      color: #000 !important;
-      font-weight: 600 !important;
-      text-shadow: 0 1px 2px rgba(255,255,255,0.7) !important;
-      background-color: rgba(255,255,255,0.35) !important;
-      padding: 5px !important;
-      border-radius: 4px !important;
-      margin-top: 5px !important;
+      color: #fff !important;
+      font-weight: 700 !important;
+      font-size: 18px !important;
+      text-shadow: 3px 3px 8px rgba(0,0,0,1) !important;
+      background: linear-gradient(135deg, rgba(0,0,0,0.95), rgba(0,0,0,0.85)) !important;
+      padding: 16px 24px !important;
+      border-radius: 10px !important;
+      margin: 20px auto 10px auto !important;
+      display: block !important;
+      text-align: center !important;
+      max-width: 90% !important;
+      width: auto !important;
+      word-wrap: break-word !important;
+      white-space: normal !important;
+      overflow: visible !important;
+      backdrop-filter: blur(10px) !important;
+      border: 2px solid rgba(255,255,255,0.4) !important;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.7) !important;
+      position: absolute !important;
+      bottom: 20px !important;
+      left: 50% !important;
+      transform: translateX(-50%) !important;
+      z-index: 15 !important;
+      min-height: 50px !important;
+      line-height: 1.5 !important;
+      letter-spacing: 0.5px !important;
     }
     .slider-btn {
       position: absolute;
@@ -208,7 +221,7 @@
       z-index: 2;
       box-shadow: none;
       transition: background 0.2s, color 0.2s;
-      display: flex;
+      display: none; /* Ocultar botones para aspecto más profesional */
       align-items: center;
       justify-content: center;
     }
@@ -218,44 +231,49 @@
     }
     .slider-btn.prev { left: -40px; }
     .slider-btn.next { right: -40px; }
-    .slider-dots {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 8px;
-      margin-top: 12px;
-      position: static;
-    }
-    .slider-dot {
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      background: #bbb;
-      opacity: 0.7;
-      cursor: pointer;
-      border: none;
-      transition: opacity 0.2s, background 0.2s;
-    }
-    .slider-dot.active {
-      background: #222;
-      opacity: 1;
-    }
 
     /* RESPONSIVE */
+    @media (min-width: 1201px) {
+      /* Estilos específicos para pantallas grandes de escritorio */
+      .slide img {
+        max-height: 400px !important; /* Imágenes aún más grandes en pantallas muy grandes */
+      }
+      .slider {
+        min-height: 440px !important;
+      }
+      .slider-container {
+        max-width: 1400px !important; /* Contenedor más amplio en pantallas grandes */
+      }
+    }
+    
+    @media (min-width: 901px) and (max-width: 1200px) {
+      /* Estilos para pantallas de escritorio medianas */
+      .slide img {
+        max-height: 350px !important; /* Tamaño intermedio para escritorio */
+      }
+      .slider {
+        min-height: 390px !important;
+      }
+    }
+    
     @media (max-width: 900px) {
       .hero-content, .slider-container {
-        max-width: 99vw;
-        padding-left: 8px;
-        padding-right: 8px;
+        max-width: 100vw;
+        padding-left: 0px;
+        padding-right: 0px;
       }
-      .slide, .slide img {
-        width: 180px;
-        min-width: 120px;
-        max-width: 220px;
-        height: 120px;
+      .slide {
+        width: 100%;
+        max-width: 100%;
+        min-width: 100%;
       }
-      .slider-btn.prev { left: -16px; }
-      .slider-btn.next { right: -16px; }
+      .slide img {
+        max-height: 140px;
+        width: auto;
+        margin: 0 auto;
+      }
+      .slider-btn.prev { left: -16px; display: none; }
+      .slider-btn.next { right: -16px; display: none; }
     }
     @media (max-width: 700px) {
       .hero-content h1, .section-title { font-size: 2rem; }
@@ -390,6 +408,10 @@
         min-width: 120px;
         max-width: 220px;
         height: 120px;
+        max-height: 140px !important; /* Tamaño reducido para tablets y móviles */
+      }
+      .slider {
+        min-height: 150px !important; /* Altura reducida para tablets */
       }
       .slider-btn.prev { left: -16px; }
       .slider-btn.next { right: -16px; }
@@ -472,250 +494,711 @@
       .hero-content, .section, .info-section { padding: 8px 2px; }
     }
 
-    /* Ajuste para textos largos y desbordes */
-    .hero-content, .section, .info-section {
-      word-break: break-word;
-      overflow-wrap: break-word;
+    /* ESTILOS ADICIONALES PARA CENTRAR SLIDER EN MÓVILES */
+    @media (max-width: 700px) {
+      .slider-container {
+        display: flex !important;
+        justify-content: center !important;
+        align-items: center !important;
+        width: 100% !important;
+      }
+      
+      .slider-container .slider {
+        display: flex !important;
+        justify-content: center !important;
+        align-items: center !important;
+        width: 100% !important;
+      }
+      
+      .slider-container .slide {
+        width: 100% !important;
+        min-width: 100% !important;
+        max-width: 100% !important;
+        position: relative !important;
+        left: auto !important;
+        right: auto !important;
+        transform: none !important;
+        margin: 0 auto !important;
+      }
+      
+      .slider-container .slide.active {
+        display: flex !important;
+        justify-content: center !important;
+        align-items: center !important;
+        flex-direction: column !important;
+        position: relative !important;
+        left: auto !important;
+        right: auto !important;
+        transform: none !important;
+        margin: 0 auto !important;
+        width: 100% !important;
+        text-align: center !important;
+      }
+      
+      .slider-container .slide.active img {
+        display: block !important;
+        margin: 0 auto !important;
+        text-align: center !important;
+        width: auto !important;
+        max-width: 85% !important;
+        height: auto !important;
+        max-height: 160px !important;
+        object-fit: contain !important;
+        position: relative !important;
+        left: auto !important;
+        right: auto !important;
+        transform: none !important;
+      }
+      
+      .slider-container .slide-title {
+        text-align: center !important;
+        width: 90% !important;
+        margin: 0 !important;
+        display: block !important;
+        color: #fff !important;
+        font-weight: 700 !important;
+        font-size: 16px !important;
+        background: linear-gradient(135deg, rgba(0,0,0,0.95), rgba(0,0,0,0.85)) !important;
+        padding: 14px 18px !important;
+        border-radius: 8px !important;
+        text-shadow: 3px 3px 8px rgba(0,0,0,1) !important;
+        backdrop-filter: blur(10px) !important;
+        border: 2px solid rgba(255,255,255,0.4) !important;
+        box-shadow: 0 6px 20px rgba(0,0,0,0.7) !important;
+        word-wrap: break-word !important;
+        white-space: normal !important;
+        overflow: visible !important;
+        max-width: 85% !important;
+        position: absolute !important;
+        bottom: 15px !important;
+        left: 50% !important;
+        transform: translateX(-50%) !important;
+        z-index: 15 !important;
+        min-height: 45px !important;
+        line-height: 1.4 !important;
+        letter-spacing: 0.5px !important;
+      }
+    }
+    
+    @media (max-width: 500px) {
+      .slider-container .slide.active img {
+        max-width: 80% !important;
+        max-height: 140px !important;
+      }
+      
+      .slider-container .slide-title {
+        font-size: 14px !important;
+        padding: 12px 16px !important;
+        max-width: 80% !important;
+        margin: 0 !important;
+        min-height: 40px !important;
+        line-height: 1.3 !important;
+        bottom: 12px !important;
+        position: absolute !important;
+        left: 50% !important;
+        transform: translateX(-50%) !important;
+        z-index: 15 !important;
+        letter-spacing: 0.3px !important;
+      }
+    }
+    
+    @media (max-width: 400px) {
+      .slider-container .slide.active img {
+        max-width: 75% !important;
+        max-height: 120px !important;
+      }
+      
+      .slider-container .slide-title {
+        font-size: 12px !important;
+        padding: 10px 12px !important;
+        max-width: 75% !important;
+        margin: 0 !important;
+        min-height: 35px !important;
+        line-height: 1.2 !important;
+        bottom: 10px !important;
+        position: absolute !important;
+        left: 50% !important;
+        transform: translateX(-50%) !important;
+        z-index: 15 !important;
+        letter-spacing: 0.2px !important;
+      }
+    }
+    
+    /* OVERRIDE FINAL PARA CENTRADO EN MÓVILES - PRIORIDAD MÁXIMA */
+    @media (max-width: 700px) {
+      #slider .slide.active,
+      #slider-ofertas .slide.active {
+        display: flex !important;
+        justify-content: center !important;
+        align-items: center !important;
+        flex-direction: column !important;
+        position: relative !important;
+        left: auto !important;
+        right: auto !important;
+        top: auto !important;
+        bottom: auto !important;
+        transform: none !important;
+        margin: 0 auto !important;
+        width: 100% !important;
+        text-align: center !important;
+      }
+      
+      #slider .slide.active img,
+      #slider-ofertas .slide.active img {
+        display: block !important;
+        margin: 0 auto !important;
+        text-align: center !important;
+        width: auto !important;
+        max-width: 85% !important;
+        height: auto !important;
+        max-height: 160px !important;
+        object-fit: contain !important;
+        position: relative !important;
+        left: auto !important;
+        right: auto !important;
+        top: auto !important;
+        bottom: auto !important;
+        transform: none !important;
+      }
+      
+      #slider,
+      #slider-ofertas {
+        display: flex !important;
+        justify-content: center !important;
+        align-items: center !important;
+        width: 100% !important;
+      }
+      
+      .slider-container {
+        display: flex !important;
+        justify-content: center !important;
+        align-items: center !important;
+        width: 100% !important;
+        text-align: center !important;
+      }
     }
 
-    /* Ajuste universal para imágenes */
-    img, .slide img {
+    /* Asegurar altura mínima para slides con títulos */
+    .slider-container .slide {
+      min-height: 250px !important;
+      position: relative !important;
+      padding-bottom: 60px !important;
+    }
+    
+    .slider-container .slide.active {
+      min-height: 250px !important;
+      position: relative !important;
+      padding-bottom: 60px !important;
+    }
+    
+    /* Estilos profesionales para textos principales */
+    .hero-slogan {
+      font-family: 'Segoe UI', 'Roboto', 'Arial', sans-serif;
+      font-weight: 900;
+      font-size: 3.2rem;
+      line-height: 1.1;
+      letter-spacing: 1.2px;
+      margin-bottom: 32px;
+      text-shadow: 
+        4px 4px 8px rgba(255,255,255,0.95), 
+        -3px -3px 6px rgba(255,255,255,0.8),
+        0 0 20px rgba(255,255,255,0.6),
+        0 0 40px rgba(255,255,255,0.3);
+      color: #000000 !important;
+      background: transparent;
+      padding: 28px 40px;
+      border-radius: 16px;
+      border: 2px solid rgba(255,255,255,0.4);
+      backdrop-filter: blur(8px);
+      box-shadow: 
+        0 8px 32px rgba(0,0,0,0.1),
+        inset 0 1px 0 rgba(255,255,255,0.4),
+        0 0 0 1px rgba(255,255,255,0.2);
+      display: inline-block;
       max-width: 100%;
-      height: auto;
-      display: block;
-      object-fit: cover;
-    }
-
-    /* Estilo para asegurar que el footer esté encima de todo */
-    footer {
+      box-sizing: border-box;
+      text-align: center;
       position: relative;
-      z-index: 10;
-    }
-
-    /* Estilo para aplicar el fondo de HomeInfo */
-    .hero-content, .slider-container {
-      position: relative;
-      z-index: 2;
-      background-color: transparent !important; /* Contenedor principal totalmente transparente */
+      text-transform: uppercase;
+      transition: all 0.3s ease;
+      transform: perspective(1000px) rotateX(2deg);
+      animation: sloganPulse 3s ease-in-out infinite;
     }
     
-    /* Mejorar la visibilidad del slider */
-    .slider-container {
-      background: rgba(255, 255, 255, 0.6); /* Fondo más opaco para aspecto formal */
-      backdrop-filter: blur(4px); /* Mayor blur para efecto cristal formal */
-      border-radius: 8px; /* Bordes menos redondeados para mayor formalidad */
-      padding: 15px; /* Mayor espacio interior */
-      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.06); /* Sombra sutil */
-      border: 1px solid rgba(255, 255, 255, 0.3); /* Borde sutil para aspecto elegante */
-      margin-top: 10px; /* Espacio superior */
-      margin-bottom: 25px; /* Mayor espacio inferior */
+    .hero-slogan:hover {
+      transform: perspective(1000px) rotateX(0deg) scale(1.02);
+      box-shadow: 
+        0 12px 48px rgba(0,0,0,0.15),
+        inset 0 1px 0 rgba(255,255,255,0.5),
+        0 0 0 1px rgba(255,255,255,0.25);
+      text-shadow: 
+        5px 5px 10px rgba(255,255,255,1), 
+        -4px -4px 8px rgba(255,255,255,0.9),
+        0 0 25px rgba(255,255,255,0.7),
+        0 0 50px rgba(255,255,255,0.4);
+      color: #000000 !important;
     }
     
-    /* Estilo para el logo de fondo */
-    .logo-background {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background-image: url('<%= homeInfo && homeInfo.logoUrl ? homeInfo.logoUrl : "" %>');
-      background-size: 45% auto; /* Tamaño reducido para aspecto más elegante */
-      background-repeat: no-repeat;
-      background-position: center;
-      opacity: 0.08; /* Opacidad muy sutil para aspecto formal */
-      z-index: -1;
-      pointer-events: none;
-      filter: saturate(1.1) brightness(1.05); /* Ligero ajuste para resaltar el logo */
-      transform: translateY(-20px); /* Pequeño desplazamiento para mejor composición */
+    @keyframes sloganPulse {
+      0%, 100% {
+        text-shadow: 
+          4px 4px 8px rgba(255,255,255,0.95), 
+          -3px -3px 6px rgba(255,255,255,0.8),
+          0 0 20px rgba(255,255,255,0.6),
+          0 0 40px rgba(255,255,255,0.3);
+      }
+      50% {
+        text-shadow: 
+          5px 5px 12px rgba(255,255,255,1), 
+          -4px -4px 8px rgba(255,255,255,0.9),
+          0 0 30px rgba(255,255,255,0.8),
+          0 0 60px rgba(255,255,255,0.5);
+      }
     }
     
-    /* Fondo semi-transparente con logo para el texto principal */
-    .hero-text-container {
-      position: relative;
-      padding: 40px;
-      border-radius: 12px;
-      margin-bottom: 30px;
-      min-height: 420px; /* Ajustada la altura para mejor proporción */
-      max-width: 85%; /* Ancho más ajustado para mejor legibilidad */
-      margin-left: auto;
-      margin-right: auto;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08); /* Sombra más pronunciada para aspecto formal */
-      /* Quité overflow: hidden para que el logo pueda extenderse */
-      background: transparent !important; /* Totalmente transparente */
-    }
-    
-    .hero-text-container::before {
+    .hero-slogan::before {
       content: '';
       position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: transparent !important; /* Totalmente transparente */
-      border-radius: 12px;
+      top: -2px;
+      left: -2px;
+      right: -2px;
+      bottom: -2px;
+      background: linear-gradient(45deg, 
+        rgba(255,255,255,0.3) 0%, 
+        rgba(255,255,255,0.1) 25%, 
+        rgba(255,255,255,0.25) 50%, 
+        rgba(255,255,255,0.1) 75%, 
+        rgba(255,255,255,0.3) 100%);
+      border-radius: 18px;
       z-index: -1;
-      backdrop-filter: none !important;
-      box-shadow: none !important;
-      border: none !important;
+      animation: borderGlow 2s linear infinite;
     }
     
-    .hero-text-container.with-logo::after {
-      content: '';
-      position: absolute; /* Posicionamiento absoluto en el contenedor */
-      top: 0;
-      left: 0;
-      width: 100%; /* Ancho del contenedor padre */
-      height: 100%; /* Alto del contenedor padre */
-      background-image: url('<%= homeInfo && homeInfo.logoUrl ? homeInfo.logoUrl : "" %>');
-      background-size: 65% auto; /* Tamaño ajustado para aspecto más formal */
-      background-repeat: no-repeat;
-      background-position: center;
-      opacity: 1.50; /* Opacidad reducida para un aspecto más sutil y formal */
-      z-index: -2; /* Z-index bajo para estar detrás del contenido */
-      pointer-events: none;
-      filter: saturate(1.2) contrast(1.1); /* Ligero ajuste para mejorar la definición del logo */
-      transform: scale(1.1); /* Ligero escalado para mayor elegancia */
+    @keyframes borderGlow {
+      0%, 100% { opacity: 0.3; }
+      50% { opacity: 0.6; }
     }
     
-    .hero-text-container h1,
-    .hero-text-container h2,
-    .hero-text-container p,
-    .hero-text-container .slider-container {
-      position: relative;
-      z-index: 1;
+    /* Responsivo para el slogan profesional */
+    @media (max-width: 768px) {
+      .hero-slogan {
+        font-size: 2.4rem;
+        padding: 22px 28px;
+        margin-bottom: 24px;
+        letter-spacing: 0.8px;
+        border-radius: 12px;
+        transform: perspective(800px) rotateX(1deg);
+      }
+      
+      .hero-slogan::before {
+        border-radius: 14px;
+      }
+      
+      .hero-descripcion {
+        font-size: 1.15rem;
+        padding: 20px 24px;
+        margin-bottom: 20px;
+        letter-spacing: 0.4px;
+        border-radius: 12px;
+      }
+      
+      .hero-descripcion::before {
+        border-radius: 14px;
+      }
+      
+      .servicio-descripcion {
+        font-size: 1rem;
+        padding: 16px 20px;
+        margin-bottom: 20px;
+        letter-spacing: 0.3px;
+        border-radius: 10px;
+      }
+      
+      .servicio-descripcion::before {
+        border-radius: 12px;
+      }
     }
     
-    .hero-text-container h1 {
-      font-size: 2.8rem;
-      font-weight: 700;
-      color: #1a1a1a;
-      margin-bottom: 25px;
+    @media (max-width: 480px) {
+      .hero-slogan {
+        font-size: 1.9rem;
+        padding: 18px 22px;
+        margin-bottom: 20px;
+        letter-spacing: 0.6px;
+        border-radius: 10px;
+        transform: perspective(600px) rotateX(0.5deg);
+      }
+      
+      .hero-slogan::before {
+        border-radius: 12px;
+      }
+      
+      .hero-descripcion {
+        font-size: 1rem;
+        padding: 16px 20px;
+        margin-bottom: 16px;
+        letter-spacing: 0.3px;
+        border-radius: 10px;
+        max-width: 95%;
+      }
+      
+      .hero-descripcion::before {
+        border-radius: 12px;
+      }
+      
+      .servicio-descripcion {
+        font-size: 0.95rem;
+        padding: 14px 18px;
+        margin-bottom: 16px;
+        letter-spacing: 0.2px;
+        border-radius: 8px;
+        max-width: 95%;
+      }
+      
+      .servicio-descripcion::before {
+        border-radius: 10px;
+      }
+    }
+    
+    .hero-descripcion {
+      font-family: 'Segoe UI', 'Roboto', 'Arial', sans-serif;
+      font-weight: 800;
+      font-size: 1.3rem;
+      line-height: 1.65;
       letter-spacing: 0.5px;
-      text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+      max-width: 650px;
+      margin: 0 auto 24px auto;
+      text-shadow: 
+        3px 3px 6px rgba(255,255,255,0.95), 
+        -2px -2px 4px rgba(255,255,255,0.8),
+        0 0 15px rgba(255,255,255,0.6),
+        0 0 30px rgba(255,255,255,0.3);
+      color: #000000 !important;
+      background: transparent;
+      padding: 24px 32px;
+      border-radius: 14px;
+      border: 2px solid rgba(255,255,255,0.4);
+      backdrop-filter: blur(6px);
+      box-shadow: 
+        0 6px 24px rgba(0,0,0,0.08),
+        inset 0 1px 0 rgba(255,255,255,0.3),
+        0 0 0 1px rgba(255,255,255,0.15);
+      text-align: center;
+      word-spacing: 1px;
+      position: relative;
+      display: inline-block;
+      box-sizing: border-box;
+      transition: all 0.3s ease;
+      animation: descripcionPulse 4s ease-in-out infinite;
     }
     
-    .hero-text-container h2 {
-      font-size: 1.6rem;
-      font-weight: 500;
-      color: #333;
-      line-height: 1.4;
-      margin-bottom: 20px;
-      letter-spacing: 0.3px;
+    .hero-descripcion:hover {
+      transform: scale(1.01);
+      box-shadow: 
+        0 8px 32px rgba(0,0,0,0.12),
+        inset 0 1px 0 rgba(255,255,255,0.4),
+        0 0 0 1px rgba(255,255,255,0.2);
+      text-shadow: 
+        4px 4px 8px rgba(255,255,255,1), 
+        -3px -3px 6px rgba(255,255,255,0.9),
+        0 0 20px rgba(255,255,255,0.7),
+        0 0 40px rgba(255,255,255,0.4);
+      color: #000000 !important;
     }
     
-    .hero-text-container p {
+    .hero-descripcion::before {
+      content: '';
+      position: absolute;
+      top: -2px;
+      left: -2px;
+      right: -2px;
+      bottom: -2px;
+      background: linear-gradient(45deg, 
+        rgba(255,255,255,0.25) 0%, 
+        rgba(255,255,255,0.08) 25%, 
+        rgba(255,255,255,0.2) 50%, 
+        rgba(255,255,255,0.08) 75%, 
+        rgba(255,255,255,0.25) 100%);
+      border-radius: 16px;
+      z-index: -1;
+      animation: borderGlowDesc 2.5s linear infinite;
+    }
+    
+    @keyframes descripcionPulse {
+      0%, 100% {
+        text-shadow: 
+          3px 3px 6px rgba(255,255,255,0.95), 
+          -2px -2px 4px rgba(255,255,255,0.8),
+          0 0 15px rgba(255,255,255,0.6),
+          0 0 30px rgba(255,255,255,0.3);
+      }
+      50% {
+        text-shadow: 
+          4px 4px 8px rgba(255,255,255,1), 
+          -3px -3px 6px rgba(255,255,255,0.9),
+          0 0 20px rgba(255,255,255,0.7),
+          0 0 40px rgba(255,255,255,0.4);
+      }
+    }
+    
+    @keyframes borderGlowDesc {
+      0%, 100% { opacity: 0.25; }
+      50% { opacity: 0.5; }
+    }
+    
+    /* Estilos para las secciones de servicios */
+    .servicio-titulo {
+      font-size: 2.5rem;
+      font-weight: 800;
+      color: #000000;
+      text-align: center;
+      margin: 32px 0 16px 0;
+      text-shadow: 2px 2px 4px rgba(255,255,255,0.9), -1px -1px 2px rgba(255,255,255,0.7);
+      background: transparent;
+      padding: 16px 24px;
+      border-radius: 12px;
+    }
+    
+    .servicio-descripcion {
+      font-family: 'Segoe UI', 'Roboto', 'Arial', sans-serif;
+      font-weight: 800;
       font-size: 1.1rem;
       line-height: 1.6;
-      color: #444;
-      margin-bottom: 25px;
-      max-width: 90%;
-      margin-left: auto;
-      margin-right: auto;
-    }
-    
-    /* Estilo para los títulos fuera del contenedor hero-text-container */
-    .hero-content > h1 {
-      transition: transform 0.2s, box-shadow 0.2s; /* Animación suave */
-      text-shadow: 0 2px 6px rgba(255,255,255,0.7); /* Sombra de texto para mayor legibilidad */
-      color: #000;
-      background-color: rgba(255,255,255,0.15); /* Fondo semitransparente */
-      padding: 10px 15px;
-      border-radius: 8px;
-      backdrop-filter: blur(3px); /* Efecto de desenfoque detrás del texto */
-      display: inline-block;
-    }
-    
-    .hero-content > h1:hover {
-      transform: translateY(-2px); /* Elevación sutil al pasar el ratón */
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12); /* Sombra más pronunciada */
-      background-color: rgba(255,255,255,0.25); /* Fondo más visible al pasar el ratón */
-    }
-    
-    /* Estilo para los títulos de servicios */
-    .servicio-titulo {
-      font-size: 2.2rem;
-      font-weight: 700;
-      color: #000;
-      text-shadow: 0 2px 8px rgba(255,255,255,0.9);
-      background-color: rgba(255,255,255,0.25);
-      padding: 12px 20px;
-      border-radius: 10px;
-      margin: 20px 0;
-      display: inline-block;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      letter-spacing: 0.4px;
+      max-width: 800px;
+      margin: 0 auto 24px auto;
+      text-shadow: 
+        3px 3px 6px rgba(255,255,255,0.95), 
+        -2px -2px 4px rgba(255,255,255,0.8),
+        0 0 15px rgba(255,255,255,0.6),
+        0 0 30px rgba(255,255,255,0.3);
+      color: #000000 !important;
+      background: transparent;
+      padding: 20px 28px;
+      border-radius: 12px;
+      border: 2px solid rgba(255,255,255,0.35);
       backdrop-filter: blur(5px);
-      border: 1px solid rgba(255,255,255,0.4);
-      letter-spacing: 1px;
-    }
-    
-    /* Estilo adicional para mejorar la legibilidad general */
-    .hero-content {
-      position: relative;
-      z-index: 2;
+      box-shadow: 
+        0 5px 20px rgba(0,0,0,0.06),
+        inset 0 1px 0 rgba(255,255,255,0.25),
+        0 0 0 1px rgba(255,255,255,0.12);
       text-align: center;
-      color: #000;
-      text-shadow: 0 1px 2px rgba(255,255,255,0.5);
+      position: relative;
+      display: inline-block;
+      box-sizing: border-box;
+      transition: all 0.3s ease;
+      animation: servicioDescPulse 3.5s ease-in-out infinite;
     }
     
-    /* Mejorar la visibilidad de las imágenes */
-    .slide img {
-      border: 3px solid rgba(255,255,255,0.7) !important;
-      box-shadow: 0 5px 15px rgba(0,0,0,0.2) !important;
+    .servicio-descripcion:hover {
+      transform: scale(1.005);
+      box-shadow: 
+        0 7px 28px rgba(0,0,0,0.1),
+        inset 0 1px 0 rgba(255,255,255,0.35),
+        0 0 0 1px rgba(255,255,255,0.18);
+      text-shadow: 
+        4px 4px 8px rgba(255,255,255,1), 
+        -3px -3px 6px rgba(255,255,255,0.9),
+        0 0 18px rgba(255,255,255,0.7),
+        0 0 35px rgba(255,255,255,0.4);
+      color: #000000 !important;
     }
+    
+    .servicio-descripcion::before {
+      content: '';
+      position: absolute;
+      top: -2px;
+      left: -2px;
+      right: -2px;
+      bottom: -2px;
+      background: linear-gradient(45deg, 
+        rgba(255,255,255,0.2) 0%, 
+        rgba(255,255,255,0.06) 25%, 
+        rgba(255,255,255,0.18) 50%, 
+        rgba(255,255,255,0.06) 75%, 
+        rgba(255,255,255,0.2) 100%);
+      border-radius: 14px;
+      z-index: -1;
+      animation: borderGlowServicio 3s linear infinite;
+    }
+    
+    @keyframes servicioDescPulse {
+      0%, 100% {
+        text-shadow: 
+          3px 3px 6px rgba(255,255,255,0.95), 
+          -2px -2px 4px rgba(255,255,255,0.8),
+          0 0 15px rgba(255,255,255,0.6),
+          0 0 30px rgba(255,255,255,0.3);
+      }
+      50% {
+        text-shadow: 
+          4px 4px 8px rgba(255,255,255,1), 
+          -3px -3px 6px rgba(255,255,255,0.9),
+          0 0 18px rgba(255,255,255,0.7),
+          0 0 35px rgba(255,255,255,0.4);
+      }
+    }
+    
+    @keyframes borderGlowServicio {
+      0%, 100% { opacity: 0.2; }
+      50% { opacity: 0.45; }
+    }
+    
+    /* Ajustes responsivos para alturas de slides */
+    @media (max-width: 700px) {
+      .slider-container .slide,
+      .slider-container .slide.active {
+        min-height: 220px !important;
+        padding-bottom: 55px !important;
+      }
+      
+      .servicio-titulo {
+        font-size: 1.8rem;
+        margin: 24px 0 12px 0;
+        padding: 12px 16px;
+      }
+      
+      .servicio-descripcion {
+        font-size: 1rem;
+        padding: 12px 16px;
+        margin: 0 auto 20px auto;
+      }
+      
+      .hero-slogan {
+        font-size: 2.2rem !important;
+        padding: 18px 24px !important;
+        margin-bottom: 22px !important;
+        letter-spacing: 0.6px !important;
+        line-height: 1.15 !important;
+      }
+      
+      .hero-descripcion {
+        font-size: 1.1rem !important;
+        padding: 16px 18px !important;
+        margin-bottom: 18px !important;
+        max-width: 90% !important;
+        line-height: 1.6 !important;
+      }
+      
+      .servicio-descripcion {
+        font-size: 1rem !important;
+        padding: 12px 16px !important;
+        margin-bottom: 20px !important;
+        max-width: 90% !important;
+      }
+    }
+    
+    @media (max-width: 500px) {
+      .slider-container .slide,
+      .slider-container .slide.active {
+        min-height: 200px !important;
+        padding-bottom: 50px !important;
+      }
+      
+      .servicio-titulo {
+        font-size: 1.5rem;
+        margin: 20px 0 10px 0;
+        padding: 10px 12px;
+      }
+      
+      .servicio-descripcion {
+        font-size: 0.95rem;
+        padding: 10px 12px;
+        margin: 0 auto 16px auto;
+      }
+      
+      .hero-slogan {
+        font-size: 1.8rem !important;
+        padding: 16px 20px !important;
+        margin-bottom: 20px !important;
+        letter-spacing: 0.4px !important;
+        line-height: 1.1 !important;
+      }
+      
+      .hero-descripcion {
+        font-size: 1rem !important;
+        padding: 14px 16px !important;
+        margin-bottom: 16px !important;
+        max-width: 95% !important;
+        line-height: 1.55 !important;
+      }
+      
+      .servicio-descripcion {
+        font-size: 0.95rem !important;
+        padding: 10px 12px !important;
+        margin-bottom: 16px !important;
+        max-width: 95% !important;
+      }
+    }
+    
+    @media (max-width: 400px) {
+      .slider-container .slide,
+      .slider-container .slide.active {
+        min-height: 180px !important;
+        padding-bottom: 45px !important;
+      }
+      
+      .servicio-titulo {
+        font-size: 1.3rem;
+        margin: 16px 0 8px 0;
+        padding: 8px 10px;
+      }
+      
+      .servicio-descripcion {
+        font-size: 0.9rem;
+        padding: 8px 10px;
+        margin: 0 auto 12px auto;
+      }
+      
+      .hero-slogan {
+        font-size: 1.5rem !important;
+        padding: 14px 18px !important;
+        margin-bottom: 18px !important;
+        letter-spacing: 0.3px !important;
+        line-height: 1.1 !important;
+      }
+      
+      .hero-descripcion {
+        font-size: 0.9rem !important;
+        padding: 12px 14px !important;
+        margin-bottom: 14px !important;
+        max-width: 98% !important;
+        line-height: 1.5 !important;
+      }
+      
+      .servicio-descripcion {
+        font-size: 0.9rem !important;
+        padding: 8px 10px !important;
+        margin-bottom: 12px !important;
+        max-width: 98% !important;
+      }
+    }
+    
+    /* Ajustes adicionales para títulos en pantallas pequeñas */
+    @media (max-width: 350px) {
+      .slider-container .slide,
+      .slider-container .slide.active {
+        min-height: 160px !important;
+        padding-bottom: 40px !important;
+      }
+      
+      .slider-container .slide-title {
+        font-size: 10px !important;
+        padding: 8px 10px !important;
+        max-width: 70% !important;
+        margin: 0 !important;
+        min-height: 30px !important;
+        line-height: 1.1 !important;
+        bottom: 8px !important;
+        position: absolute !important;
+        left: 50% !important;
+        transform: translateX(-50%) !important;
+        z-index: 15 !important;
+        letter-spacing: 0.1px !important;
+      }
+    }
+  </style>
 
-    /* Mejoras para slider de fondo */
-    body.has-bg-slider .logo-background {
-      z-index: -1; /* Por encima del slider de fondo que tiene z-index -2 */
-    }
-    
-    /* Estilos para el slider de fondo */
-    #bg-slider div {
-      transition: opacity 2.5s ease-in-out !important; /* Forzar transición suave */
-    }
-    
-    /* Estilos mejorados para el slider de fondo */
-    body.has-bg-slider::before {
-      content: '';
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background-color: rgba(0, 0, 0, 0.1); /* Ligero oscurecimiento para mejor contraste */
-      z-index: -1;
-      pointer-events: none;
-    }
-    
-    /* Mejorar visualmente el contenido sobre el slider */
-    body.background-slider-active .logo-background {
-      z-index: -1 !important; /* Asegurar que el logo esté siempre por encima del slider */
-      opacity: 0.12 !important; /* Reducir la opacidad para no interferir con el slider */
-    }
-  </style>
-</head>
-<body style="<% if (homeInfo && homeInfo.colorFondo) { %>background:<%= homeInfo.colorFondo %>;<% } else if (homeInfo && homeInfo.fondoUrl) { %>background-image:url('<%= homeInfo.fondoUrl %>');background-size:cover;background-position:center;<% } else if (homeInfo && homeInfo.fondoFileUrl) { %>background-image:url('<%= homeInfo.fondoFileUrl %>');background-size:cover;background-position:center;<% } else if (homeInfo && homeInfo.fondoInicio) { %>background-image:url('<%= homeInfo.fondoInicio %>');background-size:cover;background-position:center;<% } %>;transition: background 3s ease-in-out;">
-  <!-- Estilos adicionales para mejorar la visibilidad del slider -->
-  <style>
-    /* Estilos mejorados para el slider de fondo */
-    body.has-bg-slider::before {
-      content: '';
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background-color: rgba(0, 0, 0, 0.1); /* Ligero oscurecimiento para mejor contraste */
-      z-index: -1;
-      pointer-events: none;
-    }
-    
-    /* Mejorar visualmente el contenido sobre el slider */
-    body.background-slider-active .logo-background {
-      z-index: -1 !important; /* Asegurar que el logo esté siempre por encima del slider */
-      opacity: 0.12 !important; /* Reducir la opacidad para no interferir con el slider */
-    }
-  </style>
-  
   <!-- Script común para el slider de fondo (ya no necesario para fondos específicos) -->
   
   <!-- Para imagen de fondo específica del inicio, asegurar que se cargue correctamente -->
@@ -744,13 +1227,18 @@
       <div class="hero-text-container <% if (homeInfo && homeInfo.logoUrl) { %>with-logo<% } %>">
         <!-- <h1 style="text-shadow: 0 1px 4px rgba(255,255,255,0.8); color: #000; font-weight: 700;"><%= homeInfo && homeInfo.nombreLocal ? homeInfo.nombreLocal : 'Bienvenido a nuestra tienda' %></h1> -->
         <% if (homeInfo && homeInfo.slogan) { %>
-          <h2 style="font-weight:500;margin-bottom:18px;text-shadow: 0 1px 2px rgba(255,255,255,0.6);color:#111; background-color: rgba(255,255,255,0.15);padding: 10px 18px; border-radius: 8px; backdrop-filter: blur(4px); display: inline-block; max-width: 100%; box-sizing: border-box;"> <%= homeInfo.slogan %> </h2>
+          <h2 class="hero-slogan"> <%= homeInfo.slogan %> </h2>
         <% } %>
         <% if (homeInfo && homeInfo.descripcion) { %>
-          <p style="max-width:600px;margin:0 auto 18px auto;font-size:1.2rem;color:#222;text-shadow: 0 1px 1px rgba(255,255,255,0.7);background-color: rgba(255,255,255,0.15);padding: 10px;border-radius: 8px;backdrop-filter: blur(5px);"> <%= homeInfo.descripcion %> </p>
+          <p class="hero-descripcion"> <%= homeInfo.descripcion %> </p>
         <% } %>
            </div>
+        
+        <!-- Primer Servicio -->
         <h1 class="servicio-titulo"><%= homeInfo && homeInfo.TituloServicio1 ? homeInfo.TituloServicio1 : 'TituloServicio1' %></h1>
+        <% if (homeInfo && homeInfo.descripcionServicios) { %>
+          <p class="servicio-descripcion"><%= homeInfo.descripcionServicios %></p>
+        <% } %>
         <% if (sliderImages && sliderImages.length > 0) { %>
           <div class="slider-container">
             <button class="slider-btn prev" onclick="moveSlide(-1)">&#10094;</button>
@@ -763,12 +1251,10 @@
           <% }); %>
             </div>
             <button class="slider-btn next" onclick="moveSlide(1)">&#10095;</button>
-            <div class="slider-dots" id="slider-dots"></div>
           </div>
           <script>
             let currentSlide = 0;
             const slides = document.querySelectorAll('#slider .slide');
-            const sliderDots = document.getElementById('slider-dots');
             
             function goToServiceDetail(imageUrl) {
               // Redirigir y pasar la URL de la imagen como parámetro para poder resaltarla en services.ejs
@@ -789,14 +1275,57 @@
                 // En móviles, solo mostrar la imagen activa
                 slides[n].classList.add('active');
                 slides[n].style.display = 'flex';
+                slides[n].style.justifyContent = 'center';
+                slides[n].style.alignItems = 'center';
+                slides[n].style.flexDirection = 'column';
                 
-                // Ajustar el tamaño y posición para asegurar visibilidad completa
-                slides[n].style.transform = 'translateX(-50%) scale(1)';
+                // Centrado perfecto para móviles
+                slides[n].style.position = 'relative';
+                slides[n].style.left = 'auto';
+                slides[n].style.right = 'auto';
+                slides[n].style.transform = 'none';
+                slides[n].style.margin = '0 auto';
+                slides[n].style.width = '100%';
+                slides[n].style.textAlign = 'center';
+                
                 const slideImg = slides[n].querySelector('img');
                 if (slideImg) {
+                  slideImg.style.display = 'block';
+                  slideImg.style.margin = '0 auto';
+                  slideImg.style.textAlign = 'center';
+                  slideImg.style.width = 'auto';
+                  slideImg.style.maxWidth = '90%';
                   slideImg.style.height = 'auto';
                   slideImg.style.maxHeight = '160px';
                   slideImg.style.objectFit = 'contain';
+                }
+                
+                // Asegurar que el título se muestre correctamente con posicionamiento absoluto
+                const slideTitle = slides[n].querySelector('.slide-title');
+                if (slideTitle) {
+                  slideTitle.style.display = 'block';
+                  slideTitle.style.textAlign = 'center';
+                  slideTitle.style.position = 'absolute';
+                  slideTitle.style.bottom = '15px';
+                  slideTitle.style.left = '50%';
+                  slideTitle.style.transform = 'translateX(-50%)';
+                  slideTitle.style.maxWidth = '85%';
+                  slideTitle.style.zIndex = '15';
+                  slideTitle.style.color = '#fff';
+                  slideTitle.style.fontWeight = '700';
+                  slideTitle.style.fontSize = '16px';
+                  slideTitle.style.background = 'linear-gradient(135deg, rgba(0,0,0,0.95), rgba(0,0,0,0.85))';
+                  slideTitle.style.padding = '14px 18px';
+                  slideTitle.style.borderRadius = '8px';
+                  slideTitle.style.textShadow = '3px 3px 8px rgba(0,0,0,1)';
+                  slideTitle.style.backdropFilter = 'blur(10px)';
+                  slideTitle.style.border = '2px solid rgba(255,255,255,0.4)';
+                  slideTitle.style.boxShadow = '0 6px 20px rgba(0,0,0,0.7)';
+                  slideTitle.style.wordWrap = 'break-word';
+                  slideTitle.style.whiteSpace = 'normal';
+                  slideTitle.style.lineHeight = '1.4';
+                  slideTitle.style.letterSpacing = '0.5px';
+                  slideTitle.style.minHeight = '45px';
                 }
               } else {
                 // En desktop, mostrar prev, active y next
@@ -818,10 +1347,6 @@
                   activeImg.style.objectFit = 'contain';
                 }
               }
-              
-              Array.from(sliderDots.children).forEach((dot, i) => {
-                dot.classList.toggle('active', i === n);
-              });
             }
             
             function moveSlide(dir) {
@@ -830,20 +1355,6 @@
               if (currentSlide >= slides.length) currentSlide = 0;
               showSlide(currentSlide);
             }
-            
-            function goToSlide(idx) {
-              currentSlide = idx;
-              showSlide(currentSlide);
-            }
-            
-            // Crear dots
-            sliderDots.innerHTML = '';
-            slides.forEach((_, i) => {
-              const dot = document.createElement('div');
-              dot.className = 'slider-dot' + (i === 0 ? ' active' : '');
-              dot.onclick = () => goToSlide(i);
-              sliderDots.appendChild(dot);
-            });
             
             // Reajustar cuando cambie el tamaño de ventana
             window.addEventListener('resize', () => {
@@ -854,8 +1365,14 @@
             setInterval(() => moveSlide(1), 4000);
           </script>
         <% } %>
+        
         <div style="height:32px;"></div>
+        
+        <!-- Segundo Servicio -->
         <h1 class="servicio-titulo"><%= homeInfo && homeInfo.TituloServicio2 ? homeInfo.TituloServicio2 : 'TituloServicio2' %></h1>
+        <% if (homeInfo && homeInfo.descripcionGaleria) { %>
+          <p class="servicio-descripcion"><%= homeInfo.descripcionGaleria %></p>
+        <% } %>
         <% if (galeriaImages && galeriaImages.length > 0) { %>
           <div class="slider-container">
             <button class="slider-btn prev" onclick="moveGaleriaSlide(-1)">&#10094;</button>
@@ -868,12 +1385,10 @@
           <% }); %>
             </div>
             <button class="slider-btn next" onclick="moveGaleriaSlide(1)">&#10095;</button>
-            <div class="slider-dots" id="slider-computadoras-dots"></div>
           </div>
           <script>
             let currentGaleriaSlide = 0;
             const galeriaSlides = document.querySelectorAll('#slider-ofertas .slide');
-            const galeriaDots = document.getElementById('slider-computadoras-dots');
             
             function goToGaleriaDetail(imageUrl) {
               // Redirigir y pasar la URL de la imagen como parámetro para poder resaltarla en galeri.ejs
@@ -894,14 +1409,57 @@
                 // En móviles, solo mostrar la imagen activa
                 galeriaSlides[n].classList.add('active');
                 galeriaSlides[n].style.display = 'flex';
+                galeriaSlides[n].style.justifyContent = 'center';
+                galeriaSlides[n].style.alignItems = 'center';
+                galeriaSlides[n].style.flexDirection = 'column';
                 
-                // Ajustar el tamaño y posición para asegurar visibilidad completa en móvil
-                galeriaSlides[n].style.transform = 'translateX(-50%) scale(1)';
+                // Centrado perfecto para móviles
+                galeriaSlides[n].style.position = 'relative';
+                galeriaSlides[n].style.left = 'auto';
+                galeriaSlides[n].style.right = 'auto';
+                galeriaSlides[n].style.transform = 'none';
+                galeriaSlides[n].style.margin = '0 auto';
+                galeriaSlides[n].style.width = '100%';
+                galeriaSlides[n].style.textAlign = 'center';
+                
                 const slideImg = galeriaSlides[n].querySelector('img');
                 if (slideImg) {
+                  slideImg.style.display = 'block';
+                  slideImg.style.margin = '0 auto';
+                  slideImg.style.textAlign = 'center';
+                  slideImg.style.width = 'auto';
+                  slideImg.style.maxWidth = '90%';
                   slideImg.style.height = 'auto';
                   slideImg.style.maxHeight = '160px';
                   slideImg.style.objectFit = 'contain';
+                }
+                
+                // Asegurar que el título se muestre correctamente con posicionamiento absoluto
+                const slideTitle = galeriaSlides[n].querySelector('.slide-title');
+                if (slideTitle) {
+                  slideTitle.style.display = 'block';
+                  slideTitle.style.textAlign = 'center';
+                  slideTitle.style.position = 'absolute';
+                  slideTitle.style.bottom = '15px';
+                  slideTitle.style.left = '50%';
+                  slideTitle.style.transform = 'translateX(-50%)';
+                  slideTitle.style.maxWidth = '85%';
+                  slideTitle.style.zIndex = '15';
+                  slideTitle.style.color = '#fff';
+                  slideTitle.style.fontWeight = '700';
+                  slideTitle.style.fontSize = '16px';
+                  slideTitle.style.background = 'linear-gradient(135deg, rgba(0,0,0,0.95), rgba(0,0,0,0.85))';
+                  slideTitle.style.padding = '14px 18px';
+                  slideTitle.style.borderRadius = '8px';
+                  slideTitle.style.textShadow = '3px 3px 8px rgba(0,0,0,1)';
+                  slideTitle.style.backdropFilter = 'blur(10px)';
+                  slideTitle.style.border = '2px solid rgba(255,255,255,0.4)';
+                  slideTitle.style.boxShadow = '0 6px 20px rgba(0,0,0,0.7)';
+                  slideTitle.style.wordWrap = 'break-word';
+                  slideTitle.style.whiteSpace = 'normal';
+                  slideTitle.style.lineHeight = '1.4';
+                  slideTitle.style.letterSpacing = '0.5px';
+                  slideTitle.style.minHeight = '45px';
                 }
               } else {
                 // En desktop, mostrar prev, active y next
@@ -923,10 +1481,6 @@
                   activeImg.style.objectFit = 'contain';
                 }
               }
-              
-              Array.from(galeriaDots.children).forEach((dot, i) => {
-                dot.classList.toggle('active', i === n);
-              });
             }
             
             function moveGaleriaSlide(dir) {
@@ -935,20 +1489,6 @@
               if (currentGaleriaSlide >= galeriaSlides.length) currentGaleriaSlide = 0;
               showGaleriaSlide(currentGaleriaSlide);
             }
-            
-            function goToGaleriaSlide(idx) {
-              currentGaleriaSlide = idx;
-              showGaleriaSlide(currentGaleriaSlide);
-            }
-            
-            // Crear dots
-            galeriaDots.innerHTML = '';
-            galeriaSlides.forEach((_, i) => {
-              const dot = document.createElement('div');
-              dot.className = 'slider-dot' + (i === 0 ? ' active' : '');
-              dot.onclick = () => goToGaleriaSlide(i);
-              galeriaDots.appendChild(dot);
-            });
             
             // Reajustar cuando cambie el tamaño de ventana
             window.addEventListener('resize', () => {
@@ -967,5 +1507,157 @@
     <a href="#"><i class="fab fa-twitter"></i></a>
     <a href="#"><i class="fab fa-instagram"></i></a>
   </div>-->
+  
+  <!-- Script adicional para asegurar el centrado de sliders en móviles -->
+  <script>
+    function ensureMobileCentering() {
+      if (window.innerWidth <= 700) {
+        // Centrar slider principal
+        const slider = document.getElementById('slider');
+        if (slider) {
+          slider.style.display = 'flex';
+          slider.style.justifyContent = 'center';
+          slider.style.alignItems = 'center';
+          slider.style.width = '100%';
+        }
+        
+        const activeSlides = document.querySelectorAll('#slider .slide.active');
+        activeSlides.forEach(slide => {
+          slide.style.display = 'flex';
+          slide.style.justifyContent = 'center';
+          slide.style.alignItems = 'center';
+          slide.style.flexDirection = 'column';
+          slide.style.position = 'relative';
+          slide.style.left = 'auto';
+          slide.style.right = 'auto';
+          slide.style.transform = 'none';
+          slide.style.margin = '0 auto';
+          slide.style.width = '100%';
+          slide.style.textAlign = 'center';
+          
+          const img = slide.querySelector('img');
+          if (img) {
+            img.style.display = 'block';
+            img.style.margin = '0 auto';
+            img.style.textAlign = 'center';
+            img.style.width = 'auto';
+            img.style.maxWidth = '85%';
+            img.style.height = 'auto';
+            img.style.maxHeight = '160px';
+            img.style.objectFit = 'contain';
+            img.style.position = 'relative';
+            img.style.left = 'auto';
+            img.style.right = 'auto';
+            img.style.transform = 'none';
+          }
+          
+          // Asegurar que el título se vea correctamente
+          const title = slide.querySelector('.slide-title');
+          if (title) {
+            title.style.display = 'block';
+            title.style.textAlign = 'center';
+            title.style.margin = '10px auto 0 auto';
+            title.style.maxWidth = '85%';
+            title.style.color = '#fff';
+            title.style.fontWeight = '700';
+            title.style.background = 'linear-gradient(135deg, rgba(0,0,0,0.95), rgba(0,0,0,0.85))';
+            title.style.padding = '14px 18px';
+            title.style.borderRadius = '8px';
+            title.style.textShadow = '3px 3px 8px rgba(0,0,0,1)';
+            title.style.backdropFilter = 'blur(10px)';
+            title.style.border = '2px solid rgba(255,255,255,0.4)';
+            title.style.boxShadow = '0 6px 20px rgba(0,0,0,0.7)';
+            title.style.position = 'absolute';
+            title.style.bottom = '15px';
+            title.style.left = '50%';
+            title.style.transform = 'translateX(-50%)';
+            title.style.zIndex = '15';
+            title.style.fontSize = '16px';
+            title.style.wordWrap = 'break-word';
+            title.style.whiteSpace = 'normal';
+            title.style.lineHeight = '1.4';
+            title.style.letterSpacing = '0.5px';
+            title.style.minHeight = '45px';
+          }
+        });
+        
+        // Centrar slider de galería
+        const sliderOfertas = document.getElementById('slider-ofertas');
+        if (sliderOfertas) {
+          sliderOfertas.style.display = 'flex';
+          sliderOfertas.style.justifyContent = 'center';
+          sliderOfertas.style.alignItems = 'center';
+          sliderOfertas.style.width = '100%';
+        }
+        
+        const activeGaleriaSlides = document.querySelectorAll('#slider-ofertas .slide.active');
+        activeGaleriaSlides.forEach(slide => {
+          slide.style.display = 'flex';
+          slide.style.justifyContent = 'center';
+          slide.style.alignItems = 'center';
+          slide.style.flexDirection = 'column';
+          slide.style.position = 'relative';
+          slide.style.left = 'auto';
+          slide.style.right = 'auto';
+          slide.style.transform = 'none';
+          slide.style.margin = '0 auto';
+          slide.style.width = '100%';
+          slide.style.textAlign = 'center';
+          
+          const img = slide.querySelector('img');
+          if (img) {
+            img.style.display = 'block';
+            img.style.margin = '0 auto';
+            img.style.textAlign = 'center';
+            img.style.width = 'auto';
+            img.style.maxWidth = '85%';
+            img.style.height = 'auto';
+            img.style.maxHeight = '160px';
+            img.style.objectFit = 'contain';
+            img.style.position = 'relative';
+            img.style.left = 'auto';
+            img.style.right = 'auto';
+            img.style.transform = 'none';
+          }
+          
+          // Asegurar que el título se vea correctamente con posicionamiento absoluto - slider galería
+          const title = slide.querySelector('.slide-title');
+          if (title) {
+            title.style.display = 'block';
+            title.style.textAlign = 'center';
+            title.style.position = 'absolute';
+            title.style.bottom = '15px';
+            title.style.left = '50%';
+            title.style.transform = 'translateX(-50%)';
+            title.style.maxWidth = '85%';
+            title.style.zIndex = '15';
+            title.style.color = '#fff';
+            title.style.fontWeight = '700';
+            title.style.fontSize = '16px';
+            title.style.background = 'linear-gradient(135deg, rgba(0,0,0,0.95), rgba(0,0,0,0.85))';
+            title.style.padding = '14px 18px';
+            title.style.borderRadius = '8px';
+            title.style.textShadow = '3px 3px 8px rgba(0,0,0,1)';
+            title.style.backdropFilter = 'blur(10px)';
+            title.style.border = '2px solid rgba(255,255,255,0.4)';
+            title.style.boxShadow = '0 6px 20px rgba(0,0,0,0.7)';
+            title.style.wordWrap = 'break-word';
+            title.style.whiteSpace = 'normal';
+            title.style.lineHeight = '1.4';
+            title.style.letterSpacing = '0.5px';
+            title.style.minHeight = '45px';
+          }
+        });
+      }
+    }
+    
+    // Ejecutar al cargar la página y al cambiar el tamaño de ventana
+    window.addEventListener('load', ensureMobileCentering);
+    window.addEventListener('resize', ensureMobileCentering);
+    
+    // Ejecutar después de que se inicialicen los sliders
+    setTimeout(ensureMobileCentering, 1000);
+    setTimeout(ensureMobileCentering, 2000);
+  </script>
 </body>
 </html>

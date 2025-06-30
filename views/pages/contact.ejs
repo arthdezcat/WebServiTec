@@ -20,11 +20,177 @@
     }
 
     .contact-title {
-      font-size: 2.2rem;
-      font-weight: 800;
+      font-family: 'Segoe UI', 'Roboto', 'Arial', sans-serif;
+      font-size: 2.8rem;
+      font-weight: 900;
       text-align: center;
-      margin-bottom: 32px;
-      color: #222;
+      margin-bottom: 48px;
+      text-shadow: 
+        4px 4px 8px rgba(255,255,255,0.95), 
+        -3px -3px 6px rgba(255,255,255,0.8),
+        0 0 20px rgba(255,255,255,0.6),
+        0 0 40px rgba(255,255,255,0.3);
+      color: #000000 !important;
+      background: transparent;
+      padding: 15px 30px;
+      border-radius: 14px;
+      border: 2px solid rgba(255,255,255,0.4);
+      backdrop-filter: blur(8px);
+      box-shadow: 
+        0 8px 32px rgba(0,0,0,0.1),
+        inset 0 1px 0 rgba(255,255,255,0.4),
+        0 0 0 1px rgba(255,255,255,0.2);
+      display: block;
+      width: fit-content;
+      margin-left: auto;
+      margin-right: auto;
+      position: relative;
+      text-transform: uppercase;
+      transition: all 0.3s ease;
+      animation: tituloContactPulse 3s ease-in-out infinite;
+      letter-spacing: 1px;
+    }
+    
+    .contact-title:hover {
+      transform: scale(1.02);
+      box-shadow: 
+        0 12px 48px rgba(0,0,0,0.15),
+        inset 0 1px 0 rgba(255,255,255,0.5),
+        0 0 0 1px rgba(255,255,255,0.25);
+      text-shadow: 
+        5px 5px 10px rgba(255,255,255,1), 
+        -4px -4px 8px rgba(255,255,255,0.9),
+        0 0 25px rgba(255,255,255,0.7),
+        0 0 50px rgba(255,255,255,0.4);
+      color: #000000 !important;
+    }
+    
+    .contact-title::before {
+      content: '';
+      position: absolute;
+      top: -2px;
+      left: -2px;
+      right: -2px;
+      bottom: -2px;
+      background: linear-gradient(45deg, 
+        rgba(255,255,255,0.3) 0%, 
+        rgba(255,255,255,0.1) 25%, 
+        rgba(255,255,255,0.25) 50%, 
+        rgba(255,255,255,0.1) 75%, 
+        rgba(255,255,255,0.3) 100%);
+      border-radius: 18px;
+      z-index: -1;
+      animation: borderGlowContact 2s linear infinite;
+    }
+    
+    @keyframes tituloContactPulse {
+      0%, 100% {
+        text-shadow: 
+          4px 4px 8px rgba(255,255,255,0.95), 
+          -3px -3px 6px rgba(255,255,255,0.8),
+          0 0 20px rgba(255,255,255,0.6),
+          0 0 40px rgba(255,255,255,0.3);
+      }
+      50% {
+        text-shadow: 
+          5px 5px 12px rgba(255,255,255,1), 
+          -4px -4px 8px rgba(255,255,255,0.9),
+          0 0 30px rgba(255,255,255,0.8),
+          0 0 60px rgba(255,255,255,0.5);
+      }
+    }
+    
+    @keyframes borderGlowContact {
+      0%, 100% { opacity: 0.3; }
+      50% { opacity: 0.6; }
+    }
+    
+    .section-description {
+      font-family: 'Segoe UI', 'Roboto', 'Arial', sans-serif;
+      font-weight: 800;
+      font-size: 1.1rem !important;
+      line-height: 1.6 !important;
+      letter-spacing: 0.4px;
+      max-width: 800px !important;
+      margin: 0 auto 48px auto !important;
+      text-shadow: 
+        3px 3px 6px rgba(255,255,255,0.95), 
+        -2px -2px 4px rgba(255,255,255,0.8),
+        0 0 15px rgba(255,255,255,0.6),
+        0 0 30px rgba(255,255,255,0.3);
+      color: #000000 !important;
+      background: transparent;
+      padding: 10px 28px !important;
+      border-radius: 12px;
+      border: 2px solid rgba(255,255,255,0.35);
+      backdrop-filter: blur(5px);
+      box-shadow: 
+        0 5px 20px rgba(0,0,0,0.06),
+        inset 0 1px 0 rgba(255,255,255,0.25),
+        0 0 0 1px rgba(255,255,255,0.12);
+      text-align: center !important;
+      position: relative;
+      display: block;
+      width: fit-content;
+      margin-left: auto !important;
+      margin-right: auto !important;
+      box-sizing: border-box;
+      transition: all 0.3s ease;
+      animation: descripcionContactPulse 3.5s ease-in-out infinite;
+    }
+    
+    .section-description:hover {
+      transform: scale(1.005);
+      box-shadow: 
+        0 7px 28px rgba(0,0,0,0.1),
+        inset 0 1px 0 rgba(255,255,255,0.35),
+        0 0 0 1px rgba(255,255,255,0.18);
+      text-shadow: 
+        4px 4px 8px rgba(255,255,255,1), 
+        -3px -3px 6px rgba(255,255,255,0.9),
+        0 0 18px rgba(255,255,255,0.7),
+        0 0 35px rgba(255,255,255,0.4);
+      color: #000000 !important;
+    }
+    
+    .section-description::before {
+      content: '';
+      position: absolute;
+      top: -2px;
+      left: -2px;
+      right: -2px;
+      bottom: -2px;
+      background: linear-gradient(45deg, 
+        rgba(255,255,255,0.2) 0%, 
+        rgba(255,255,255,0.06) 25%, 
+        rgba(255,255,255,0.18) 50%, 
+        rgba(255,255,255,0.06) 75%, 
+        rgba(255,255,255,0.2) 100%);
+      border-radius: 14px;
+      z-index: -1;
+      animation: borderGlowDescContact 3s linear infinite;
+    }
+    
+    @keyframes descripcionContactPulse {
+      0%, 100% {
+        text-shadow: 
+          3px 3px 6px rgba(255,255,255,0.95), 
+          -2px -2px 4px rgba(255,255,255,0.8),
+          0 0 15px rgba(255,255,255,0.6),
+          0 0 30px rgba(255,255,255,0.3);
+      }
+      50% {
+        text-shadow: 
+          4px 4px 8px rgba(255,255,255,1), 
+          -3px -3px 6px rgba(255,255,255,0.9),
+          0 0 18px rgba(255,255,255,0.7),
+          0 0 35px rgba(255,255,255,0.4);
+      }
+    }
+    
+    @keyframes borderGlowDescContact {
+      0%, 100% { opacity: 0.2; }
+      50% { opacity: 0.45; }
     }
 
     .contacts-container {
@@ -271,7 +437,7 @@
   <section class="contact-section">
     <h2 class="contact-title">Contactos</h2>
     <% if (homeInfo && homeInfo.descripcionContacto) { %>
-    <div class="section-description" style="text-align: center; margin-bottom: 32px; font-size: 1.1rem; color: #555; max-width: 800px; margin-left: auto; margin-right: auto;">
+    <div class="section-description">
       <%= homeInfo.descripcionContacto %>
     </div>
     <% } %>
