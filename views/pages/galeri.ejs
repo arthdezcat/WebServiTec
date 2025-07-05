@@ -286,9 +286,11 @@
       height: 100%;
       overflow: hidden;
       background-color: rgba(0, 0, 0, 0.8);
+      justify-content: center;
+      align-items: center;
     }
     .img-modal.active {
-      display: block;
+      display: flex;
     }
     .img-modal-close {
       position: absolute;
@@ -449,6 +451,8 @@
           <% if (oferta.garantia) { %>
             <div class="descripcion"><strong>Garantía:</strong> <%= oferta.garantia %></div>
           <% } %>
+          <!-- Botón para cotizar -->
+          <button class="btn-cotizar" onclick='openCotizarModal(<%- JSON.stringify(oferta) %>)'>Preguntar o Cotizar costo</button>
         </div>
       <% }); %>
     </div>
@@ -458,6 +462,32 @@
   <div class="img-modal" id="imgModal" onclick="closeImgModal(event)">
     <button class="img-modal-close" onclick="closeImgModal(event)">&times;</button>
     <img id="imgModalImg" src="" alt="Imagen ampliada">
+  </div>
+  <!-- Modal para cotizar -->
+  <div class="img-modal" id="cotizarModal" style="z-index:2000;">
+    <div style="background:#fff;padding:24px 18px 18px 18px;border-radius:12px;max-width:400px;width:95vw;box-shadow:0 4px 24px rgba(0,0,0,0.18);position:relative;text-align:center;">
+      <button class="img-modal-close" style="top:8px;right:8px;color:#222;" onclick="closeCotizarModal()">&times;</button>
+      <h3 style="font-size:1.3em;margin-bottom:10px;">Cotizar o preguntar por esta oferta</h3>
+      <div id="cotizarOfertaInfo" style="margin-bottom:10px;"></div>
+      <div style="margin-bottom:10px;">
+        <img id="cotizarImgPreview" src="" alt="Imagen oferta" style="width:120px;height:120px;object-fit:cover;border-radius:8px;display:block;margin:0 auto 10px auto;">
+      </div>
+      <label for="cotizarNombre" style="font-weight:600;">Tu nombre:</label>
+      <input type="text" id="cotizarNombre" style="width:100%;margin:6px 0 12px 0;padding:7px 8px;border-radius:6px;border:1px solid #bbb;" placeholder="Escribe tu nombre">
+      <label for="cotizarModelo" style="font-weight:600;">Modelo del dispositivo:</label>
+      <input type="text" id="cotizarModelo" style="width:100%;margin:6px 0 12px 0;padding:7px 8px;border-radius:6px;border:1px solid #bbb;" placeholder="Ejemplo: Samsung A32">
+      <label for="cotizarPreguntaExtra" style="font-weight:600;">Pregunta extra:</label>
+      <input type="text" id="cotizarPreguntaExtra" style="width:100%;margin:8px 0 16px 0;padding:7px 8px;border-radius:6px;border:1px solid #bbb;" placeholder="¿Algunas preguntas adicionales?">
+      <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;align-items:center;">
+        <button id="btnCotizarWhatsapp" style="background:#25d366;color:#fff;padding:8px 16px;border:none;border-radius:6px;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:6px;"><i class="fab fa-whatsapp"></i> WhatsApp</button>
+        <button id="btnCotizarGmail" style="background:#ea4335;color:#fff;padding:8px 16px;border:none;border-radius:6px;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:6px;"><i class="fas fa-envelope"></i> Gmail</button>
+        <button id="btnCotizarMessenger" style="background:#0084ff;color:#fff;padding:8px 16px;border:none;border-radius:6px;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:6px;"><i class="fab fa-facebook-messenger"></i> Messenger</button>
+      </div>
+      <div id="ayudaMessenger" style="margin-top:10px;font-size:0.98em;color:#555;display:none;">
+        <i class="fas fa-info-circle"></i> El mensaje ha sido copiado. Ahora haz clic nuevamente en Messenger para abrir el chat y pégalo allí.
+      </div>
+      <textarea id="mensajeFormal" style="width:100%;margin-top:10px;min-height:90px;resize:vertical;padding:8px;border-radius:6px;border:1px solid #bbb;display:none;"></textarea>
+    </div>
   </div>
   <script>
     function openImgModal(img) {
@@ -548,6 +578,117 @@
         });
       }
     });
+
+    // Cotizar Modal para galería
+    let cotizarOferta = null;
+    let whatsappUrl = '';
+    let gmailUrl = '';
+    let messengerUrl = '';
+    // Obtener los enlaces de contacto del primer contacto disponible
+    <% let whatsappContact = null, gmailContact = null, messengerContact = null;
+       if (typeof contact !== 'undefined' && contact && contact.length) {
+         for (let i = 0; i < contact.length; i++) {
+           if (!whatsappContact && contact[i].whatsappUrl) whatsappContact = contact[i].whatsappUrl;
+           if (!gmailContact && contact[i].emailUrl) gmailContact = contact[i].emailUrl;
+           if (!messengerContact && contact[i].messengerUrl) {
+             messengerContact = contact[i].messengerUrl;
+           } else if (!messengerContact && contact[i].facebookUrl) {
+             if (contact[i].facebookUrl.startsWith('https://m.me/')) {
+               messengerContact = contact[i].facebookUrl;
+             } else if (contact[i].facebookUrl.includes('facebook.com/profile.php?id=')) {
+               const id = contact[i].facebookUrl.split('id=')[1].split('&')[0];
+               messengerContact = 'https://m.me/' + id;
+             }
+           }
+         }
+       }
+    %>
+    whatsappUrl = '<%= whatsappContact ? whatsappContact : '' %>';
+    gmailUrl = '<%= gmailContact ? gmailContact : '' %>';
+    messengerUrl = '<%= messengerContact ? messengerContact : '' %>';
+
+    function openCotizarModal(oferta) {
+      cotizarOferta = oferta;
+      document.getElementById('cotizarModal').classList.add('active');
+      // Mostrar info de la oferta
+      document.getElementById('cotizarOfertaInfo').innerHTML =
+        `<div style='font-weight:700;'>${oferta.title}</div>`+
+        `<div style='font-size:0.98em;color:#444;margin-bottom:4px;'>${oferta.description}</div>`;
+      document.getElementById('cotizarImgPreview').src = oferta.image;
+      document.getElementById('cotizarPreguntaExtra').value = '';
+      document.getElementById('cotizarNombre').value = '';
+      document.getElementById('cotizarModelo').value = '';
+      document.getElementById('mensajeFormal').style.display = 'none';
+      document.getElementById('ayudaMessenger').style.display = 'none';
+      // WhatsApp
+      document.getElementById('btnCotizarWhatsapp').onclick = function() {
+        if (!cotizarOferta || !whatsappUrl) return;
+        const nombre = document.getElementById('cotizarNombre').value.trim() || 'No especificado';
+        const modelo = document.getElementById('cotizarModelo').value.trim() || 'No especificado';
+        const pregunta = document.getElementById('cotizarPreguntaExtra').value || '';
+        const tipoServicio = '<%= homeInfo && homeInfo.TituloServicio2 ? homeInfo.TituloServicio2 : "" %>';
+        const msg =
+          `Hola, mi nombre es ${nombre}.\nTipo de servicio: ${tipoServicio}\nMe gustaría solicitar información y una cotización para el siguiente servicio:\n• Servicio: ${cotizarOferta.title}\n• Descripción: ${cotizarOferta.description}\n• Modelo del dispositivo: ${modelo}\n` +
+          (pregunta ? `\n${pregunta}\n` : '') +
+          `\nQuedo atento(a) a su respuesta. Muchas gracias.`;
+        const url = whatsappUrl + (whatsappUrl.includes('?') ? '&' : '?') + 'text=' + encodeURIComponent(msg);
+        window.open(url, '_blank');
+      };
+      // Gmail
+      document.getElementById('btnCotizarGmail').onclick = function() {
+        if (!cotizarOferta || !gmailUrl) return;
+        const nombre = document.getElementById('cotizarNombre').value.trim() || 'No especificado';
+        const modelo = document.getElementById('cotizarModelo').value.trim() || 'No especificado';
+        const pregunta = document.getElementById('cotizarPreguntaExtra').value || '';
+        const tipoServicio = '<%= homeInfo && homeInfo.TituloServicio2 ? homeInfo.TituloServicio2 : "" %>';
+        const subject = `Cotización de servicio: ${cotizarOferta.title}`;
+        const body =
+          `Hola, mi nombre es ${nombre}.\nTipo de servicio: ${tipoServicio}\nMe gustaría solicitar información y una cotización para el siguiente servicio:\n• Servicio: ${cotizarOferta.title}\n• Descripción: ${cotizarOferta.description}\n• Modelo del dispositivo: ${modelo}\n` +
+          (pregunta ? `\n${pregunta}\n` : '') +
+          `\nQuedo atento(a) a su respuesta. Muchas gracias.`;
+        const url = gmailUrl + (gmailUrl.includes('?') ? '&' : '?') + 'subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(body);
+        window.open(url, '_blank');
+      };
+      // Messenger doble clic
+      if (typeof messengerUrl !== 'undefined' && messengerUrl) {
+        let messengerClickState = 0;
+        document.getElementById('btnCotizarMessenger').innerHTML = '<i class="fab fa-facebook-messenger"></i> Messenger';
+        document.getElementById('btnCotizarMessenger').onclick = function() {
+          if (messengerClickState === 0) {
+            // Primer clic: copiar mensaje y mostrar ayuda
+            const nombre = document.getElementById('cotizarNombre').value.trim() || 'No especificado';
+            const modelo = document.getElementById('cotizarModelo').value.trim() || 'No especificado';
+            const pregunta = document.getElementById('cotizarPreguntaExtra').value || '';
+            const tipoServicio = '<%= homeInfo && homeInfo.TituloServicio2 ? homeInfo.TituloServicio2 : "" %>';
+            const msg =
+              `Hola, mi nombre es ${nombre}.\nTipo de servicio: ${tipoServicio}\nMe gustaría solicitar información y una cotización para el siguiente servicio:\n• Servicio: ${cotizarOferta.title}\n• Descripción: ${cotizarOferta.description}\n• Modelo del dispositivo: ${modelo}\n` +
+              (pregunta ? `\n${pregunta}\n` : '') +
+              `\nQuedo atento(a) a su respuesta. Muchas gracias.`;
+            document.getElementById('mensajeFormal').value = msg;
+            document.getElementById('mensajeFormal').style.display = 'block';
+            document.getElementById('ayudaMessenger').style.display = 'block';
+            navigator.clipboard.writeText(msg).then(function() {
+              document.getElementById('btnCotizarMessenger').innerHTML = '<i class="fab fa-facebook-messenger"></i> Abrir Messenger';
+              document.getElementById('ayudaMessenger').innerHTML = '<i class="fas fa-info-circle"></i> El mensaje ha sido copiado. Ahora haz clic nuevamente en Messenger para abrir el chat y pégalo allí.';
+              messengerClickState = 1;
+            });
+          } else {
+            // Segundo clic: abrir Messenger
+            window.open(messengerUrl, '_blank');
+            setTimeout(function() {
+              messengerClickState = 0;
+              document.getElementById('btnCotizarMessenger').innerHTML = '<i class="fab fa-facebook-messenger"></i> Messenger';
+              document.getElementById('ayudaMessenger').style.display = 'none';
+              document.getElementById('mensajeFormal').style.display = 'none';
+            }, 2000);
+          }
+        };
+      }
+    }
+    function closeCotizarModal() {
+      document.getElementById('cotizarModal').classList.remove('active');
+      cotizarOferta = null;
+    }
   </script>
   <!--<div class="sidebar-social">
     <a href="#"><i class="fab fa-facebook-f"></i></a>
