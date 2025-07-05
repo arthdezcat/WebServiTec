@@ -850,26 +850,19 @@
         vertical-align: middle;
       }
       
-      /* Distribución para 3 columnas visibles: Nombre, Icono, Acciones */
+      /* Distribución para 2 columnas visibles: Nombre, Acciones */
       .contact-table th:first-child,
       .contact-table td:first-child {
         padding-right: 12px !important;
-        width: 50%;
+        width: 70%;
         text-align: left;
         padding-left: 16px !important;
-      }
-      
-      .contact-table th:nth-child(5),
-      .contact-table td:nth-child(5) {
-        width: 25%;
-        text-align: center;
-        padding: 8px 4px !important;
       }
       
       .contact-table th:last-child,
       .contact-table td:last-child {
         padding-left: 8px !important;
-        width: 25%;
+        width: 30%;
         text-align: center;
       }
       
@@ -894,18 +887,6 @@
         margin-left: 4px !important;
         display: inline;
       }
-      
-      /* Ajustar iconos para que se vean bien en móvil */
-      .contact-table .default-icon {
-        width: 28px;
-        height: 28px;
-        font-size: 14px;
-      }
-      
-      .contact-table img {
-        width: 28px !important;
-        height: 28px !important;
-      }
     }
 
     @media (max-width: 480px) {
@@ -922,22 +903,15 @@
       .contact-table th:first-child,
       .contact-table td:first-child {
         padding-right: 8px !important;
-        width: 45%;
+        width: 65%;
         padding-left: 8px !important;
         font-size: 0.8rem;
-      }
-      
-      .contact-table th:nth-child(5),
-      .contact-table td:nth-child(5) {
-        width: 25%;
-        text-align: center;
-        padding: 6px 2px !important;
       }
       
       .contact-table th:last-child,
       .contact-table td:last-child {
         padding-left: 4px !important;
-        width: 30%;
+        width: 35%;
       }
       
       .actions-column {
@@ -958,18 +932,6 @@
       
       .actions-column .btn i {
         font-size: 0.7rem;
-      }
-      
-      /* Iconos más pequeños para pantallas muy pequeñas */
-      .contact-table .default-icon {
-        width: 24px;
-        height: 24px;
-        font-size: 12px;
-      }
-      
-      .contact-table img {
-        width: 24px !important;
-        height: 24px !important;
       }
       
       /* Encabezados más compactos */
@@ -1043,6 +1005,46 @@
         width: 32px !important;
         height: 32px !important;
       }
+    }
+
+    /* Mejoras adicionales para la tabla de contactos */
+    .contact-table tbody tr:hover {
+      background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+      transform: translateY(-1px);
+      transition: all 0.2s ease;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    }
+    
+    .contact-table tbody tr {
+      transition: all 0.2s ease;
+      border-bottom: 1px solid #e2e8f0;
+    }
+    
+    .contact-table tbody tr:last-child {
+      border-bottom: none;
+    }
+    
+    /* Mejorar espaciado entre filas */
+    .contact-table tbody tr td {
+      border-top: 8px solid transparent;
+      border-bottom: 8px solid transparent;
+    }
+    
+    /* Estilo mejorado para enlaces */
+    .contact-table a {
+      color: #4f46e5;
+      text-decoration: none;
+      font-weight: 500;
+      padding: 4px 8px;
+      border-radius: 4px;
+      transition: all 0.2s ease;
+      background: linear-gradient(135deg, #e0e7ff 0%, #c7d2fe 100%);
+    }
+    
+    .contact-table a:hover {
+      background: linear-gradient(135deg, #c7d2fe 0%, #a5b4fc 100%);
+      color: #3730a3;
+      transform: translateY(-1px);
     }
   </style>
 </head>
@@ -1157,7 +1159,7 @@
         <th class="hide-mobile">Email</th>
         <th class="hide-mobile">Teléfono</th>
         <th class="hide-mobile">Facebook</th>
-        <th>Icono</th>
+        <th class="hide-mobile">Icono</th>
         <th class="actions-column">Acciones</th>
       </tr>
     </thead>
@@ -1172,7 +1174,7 @@
               <a href="<%= contact.facebookUrl %>" target="_blank">Ver</a>
             <% } %>
           </td>
-          <td>
+          <td class="hide-mobile">
             <% if (contact.iconUrl) { %>
               <img src="<%= contact.iconUrl %>" alt="icono" style="width:32px;height:32px;object-fit:cover;border-radius:6px;">
             <% } else { %>

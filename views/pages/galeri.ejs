@@ -478,10 +478,16 @@
       <input type="text" id="cotizarModelo" style="width:100%;margin:6px 0 12px 0;padding:7px 8px;border-radius:6px;border:1px solid #bbb;" placeholder="Ejemplo: Samsung A32">
       <label for="cotizarPreguntaExtra" style="font-weight:600;">Pregunta extra:</label>
       <input type="text" id="cotizarPreguntaExtra" style="width:100%;margin:8px 0 16px 0;padding:7px 8px;border-radius:6px;border:1px solid #bbb;" placeholder="¿Algunas preguntas adicionales?">
-      <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;align-items:center;">
-        <button id="btnCotizarWhatsapp" style="background:#25d366;color:#fff;padding:8px 16px;border:none;border-radius:6px;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:6px;"><i class="fab fa-whatsapp"></i> WhatsApp</button>
-        <button id="btnCotizarGmail" style="background:#ea4335;color:#fff;padding:8px 16px;border:none;border-radius:6px;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:6px;"><i class="fas fa-envelope"></i> Gmail</button>
-        <button id="btnCotizarMessenger" style="background:#0084ff;color:#fff;padding:8px 16px;border:none;border-radius:6px;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:6px;"><i class="fab fa-facebook-messenger"></i> Messenger</button>
+      <div class="modal-social-buttons">
+        <button id="btnCotizarWhatsapp" class="social-btn whatsapp" title="WhatsApp">
+          <i class="fab fa-whatsapp"></i>
+        </button>
+        <button id="btnCotizarGmail" class="social-btn gmail" title="Gmail">
+          <i class="fas fa-envelope"></i>
+        </button>
+        <button id="btnCotizarMessenger" class="social-btn messenger" title="Messenger">
+          <i class="fab fa-facebook-messenger"></i>
+        </button>
       </div>
       <div id="ayudaMessenger" style="margin-top:10px;font-size:0.98em;color:#555;display:none;">
         <i class="fas fa-info-circle"></i> El mensaje ha sido copiado. Ahora haz clic nuevamente en Messenger para abrir el chat y pégalo allí.
@@ -652,7 +658,7 @@
       // Messenger doble clic
       if (typeof messengerUrl !== 'undefined' && messengerUrl) {
         let messengerClickState = 0;
-        document.getElementById('btnCotizarMessenger').innerHTML = '<i class="fab fa-facebook-messenger"></i> Messenger';
+        document.getElementById('btnCotizarMessenger').innerHTML = '<i class="fab fa-facebook-messenger"></i>';
         document.getElementById('btnCotizarMessenger').onclick = function() {
           if (messengerClickState === 0) {
             // Primer clic: copiar mensaje y mostrar ayuda
@@ -668,7 +674,7 @@
             document.getElementById('mensajeFormal').style.display = 'block';
             document.getElementById('ayudaMessenger').style.display = 'block';
             navigator.clipboard.writeText(msg).then(function() {
-              document.getElementById('btnCotizarMessenger').innerHTML = '<i class="fab fa-facebook-messenger"></i> Abrir Messenger';
+              document.getElementById('btnCotizarMessenger').innerHTML = '<i class="fas fa-external-link-alt"></i>';
               document.getElementById('ayudaMessenger').innerHTML = '<i class="fas fa-info-circle"></i> El mensaje ha sido copiado. Ahora haz clic nuevamente en Messenger para abrir el chat y pégalo allí.';
               messengerClickState = 1;
             });
@@ -677,7 +683,7 @@
             window.open(messengerUrl, '_blank');
             setTimeout(function() {
               messengerClickState = 0;
-              document.getElementById('btnCotizarMessenger').innerHTML = '<i class="fab fa-facebook-messenger"></i> Messenger';
+              document.getElementById('btnCotizarMessenger').innerHTML = '<i class="fab fa-facebook-messenger"></i>';
               document.getElementById('ayudaMessenger').style.display = 'none';
               document.getElementById('mensajeFormal').style.display = 'none';
             }, 2000);

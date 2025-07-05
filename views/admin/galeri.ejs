@@ -867,6 +867,51 @@
         text-align: center;
       }
     }
+
+    /* Mejoras adicionales para la tabla de galería */
+    .offer-table tbody tr:hover {
+      background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+      transform: translateY(-1px);
+      transition: all 0.2s ease;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    }
+    
+    .offer-table tbody tr {
+      transition: all 0.2s ease;
+      border-bottom: 1px solid #e2e8f0;
+    }
+    
+    .offer-table tbody tr:last-child {
+      border-bottom: none;
+    }
+    
+    /* Mejorar espaciado entre filas */
+    .offer-table tbody tr td {
+      border-top: 8px solid transparent;
+      border-bottom: 8px solid transparent;
+    }
+    
+    /* Estilo mejorado para precios */
+    .offer-table td:nth-child(3) {
+      font-weight: 600;
+      color: #059669;
+      background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+      border-radius: 8px;
+      margin: 4px;
+      padding: 8px 12px !important;
+      font-size: 0.9rem;
+    }
+    
+    /* Estilo mejorado para garantía */
+    .offer-table td:nth-child(4) {
+      font-weight: 500;
+      color: #7c3aed;
+      background: linear-gradient(135deg, #ede9fe 0%, #ddd6fe 100%);
+      border-radius: 8px;
+      margin: 4px;
+      padding: 8px 12px !important;
+      font-size: 0.85rem;
+    }
   </style>
 </head>
 <body class="admin-page">
