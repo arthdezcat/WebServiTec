@@ -421,7 +421,7 @@
   </script>
   <% } else if (homeInfo && homeInfo.fondoFileUrl) { %>
   <script>
-    window.addEventListener('load', function() {
+    window.addEventListener('load', function() { 
       document.body.style.backgroundImage = 'url(<%= homeInfo.fondoFileUrl %>)';
       document.body.style.backgroundSize = 'cover';
       document.body.style.backgroundPosition = 'center';
